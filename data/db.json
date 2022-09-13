@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Amritsari Chicken Masala",
+      "image": "https://i.ndtvimg.com/i/2018-01/butter-chicken_620x350_51517373579.jpg",
+      "description": "Chicken is a Punjabi cuisine favorite. Here's the recipe of one of it's most prized Indian dishes. Boneless chunks of chicken lathered with a rich, buttery gravy of cream, tomatoes and spices. This cuisine is definitely worth trying, especially during festive season. So, impress your guests with nothing but the best. "
+    },
+    {
+      "id": 2,
+      "name": "Murg Malaiwala",
+      "image": "https://c.ndtvimg.com/2020-07/10a2avlo_butter-chicken-khichdi_625x300_24_July_20.jpg",
+      "description": "Chicken drumsticks laced with delicate flavors of cream, milk, saffron, rose petals and mild spices. This recipe is not made with oil or ghee; but it will definitely make a great start to your festive cheer. Make sure you garnish the dish with raw almonds that only enhance the dish's flavour. "
+    },
+    {
+        "id": 3,
+        "name": "Masaledar Chicken Lollipop",
+        "image": "https://c.ndtvimg.com/2020-07/0vhf999_chicken-wings_625x300_17_July_20.jpg",
+        "description": "The oriental chicken lollipops get a desi makeover. Chicken wrapped in rustic spices and fried crisp. A great party starter to impress your guests this festive season. You can serve it with rumali rotis too. "
+    },
+    {
+        "id": 4,
+        "name": "Butter Chicken",
+        "image": "https://c.ndtvimg.com/2019-03/ef4kmc48_butter-chicken_625x300_26_March_19.jpg",
+        "description": "Straight from a Punjabi kitchen, butter chicken has been an instant hit through the years. Marinated overnight, the chicken is roasted and cooked in tomato puree, cream and masalas. Enjoy the classic creaminess of the dish with this recipe. "
+    }
+  ]
+}
