@@ -34,15 +34,19 @@ import RightBar from "./RightBar";
 import { useState } from "react";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 const drawerWidth = 240;
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const notification = [
-  "Dr sultads Send you Photo",
-  "Resport created successfully",
-  "Reminder : Treatment Time!",
-  "Dr sultads Send you Photo",
-  "Resport created successfully",
+  "Items Added to the Card",
+  "Items created successfully",
+  "Reminder : Ready for lunch Time!",
+  "New Order added",
+  "Items created successfully",
 ];
 
 const openedMixin = (theme) => ({
@@ -145,6 +149,13 @@ export default function Navbar2() {
   const idNotify = openNotify ? "simple-popover" : undefined;
   const opening = Boolean(anchorEl);
   const id = opening ? "simple-popover" : undefined;
+
+  const drawerList = [
+    {name:'Dashboard',icon:<DashboardIcon/>},
+    {name:'OrderedItem',icon:<ShoppingCartIcon />},
+    {name:'Menu',icon:<RestaurantMenuIcon />},
+    {name:'Stocks',icon:<AutoGraphIcon/>}
+  ]
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -268,9 +279,9 @@ export default function Navbar2() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Dashboard", "OrderedItem", "Menu", "Stocks"].map((text, index) => (
+          {drawerList.map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <Link to={text}>
+              <Link to={text.name}>
                 <ListItemButton
                   sx={{
                     minHeight: 48,
@@ -285,9 +296,9 @@ export default function Navbar2() {
                       justifyContent: "center",
                     }}
                   >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {text.icon}
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary={text.name} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
               </Link>
             </ListItem>
