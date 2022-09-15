@@ -21,7 +21,7 @@ function Dashboard() {
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={4} >
-            <Card sx={{ maxWidth: 345, margin: 2,fontSize: 12, height: 120, bgcolor: '#191970', color: '#fff' }}>
+            <Card sx={{ maxWidth: 345, margin: 2,fontSize: 12, height: 120, bgcolor: '#0066ff', color: '#fff' }}>
               <CardActionArea>
                 <CardContent>
                   <Stack direction="row" alignItems="center" gap={1}>
@@ -45,7 +45,7 @@ function Dashboard() {
             </Card>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Card sx={{ maxWidth: 345, margin: 2, fontSize: 12, height: 120, bgcolor: '#191970', color: '#fff' }}>
+            <Card sx={{ maxWidth: 345, margin: 2, fontSize: 12, height: 120, bgcolor: '#0066ff', color: '#fff' }}>
               <CardActionArea>
                 <CardContent>
                   <Stack direction="row" alignItems="center" gap={1}>
@@ -63,7 +63,7 @@ function Dashboard() {
             </Card>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Card sx={{ maxWidth: 345, margin: 2, height: 120, bgcolor: '#191970', color: '#fff' }}>
+            <Card sx={{ maxWidth: 345, margin: 2, height: 120, bgcolor: '#0066ff', color: '#fff' }}>
               <CardActionArea>
                 <CardContent>
                   <Stack direction="row" alignItems="center" gap={1}>
@@ -81,7 +81,7 @@ function Dashboard() {
             </Card>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Card sx={{ maxWidth: 345, margin: 2, height: 120,bgcolor: '#191970', color: '#fff' }}>
+            <Card sx={{ maxWidth: 345, margin: 2, height: 120,bgcolor: '#0066ff', color: '#fff' }}>
               <CardActionArea>
                 <CardContent>
                   <Stack direction="row" alignItems="center" gap={1}>
@@ -99,7 +99,7 @@ function Dashboard() {
             </Card>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
-            <Card sx={{ maxWidth: 345, margin: 2, height: 120, bgcolor: '#191970', color: '#fff' }}>
+            <Card sx={{ maxWidth: 345, margin: 2, height: 120, bgcolor: '#0066ff', color: '#fff' }}>
               <CardActionArea>
                 <CardContent>
                   <Stack direction="row" alignItems="center" gap={1}>

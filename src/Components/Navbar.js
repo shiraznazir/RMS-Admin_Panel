@@ -191,7 +191,7 @@ export default function PrimarySearchAppBar() {
                     <ListItem key={text} disablePadding>
                       <ListItemButton>
                         <Link to={"/"+text} >
-                          <ListItemText primary={text} />
+                          <ListItemText primary={text}  onClick={() => setIsDrawerOpen(false)} />
                         </Link>
                       </ListItemButton>
                     </ListItem>
@@ -207,7 +207,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            RMS
           </Typography>
           <Search>
             <SearchIconWrapper>

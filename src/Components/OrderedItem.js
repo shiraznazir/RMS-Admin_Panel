@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography'
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -21,7 +22,9 @@ const rows = [
 
 export default function OrderedItem() {
   return (
-    <TableContainer component={Paper}>
+    <div>
+      <Typography variant='h1' >Orders</Typography>
+      <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -50,5 +53,6 @@ export default function OrderedItem() {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
   );
 }

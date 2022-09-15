@@ -1,3 +1,7 @@
+if (!('process' in window)) {
+  // @ts-ignore
+  window.process = {}
+}
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
