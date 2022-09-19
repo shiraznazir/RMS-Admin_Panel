@@ -38,6 +38,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import Login from './Login'
 
 const drawerWidth = 240;
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -180,7 +181,7 @@ export default function Navbar2() {
 
             <Grid item xs={10.5}>
               <Typography variant="h6" noWrap component="div">
-                Resturant Management System
+                RMS
               </Typography>
             </Grid>
             <Grid item xs={0.5}>
@@ -281,12 +282,13 @@ export default function Navbar2() {
         <List>
           {drawerList.map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <Link to={text.name}>
+              <Link style={{ textDecoration: 'none', color: 'white' }} to={text.name}>
                 <ListItemButton
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
+                    
                   }}
                 >
                   <ListItemIcon
@@ -308,6 +310,7 @@ export default function Navbar2() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard2 />} />
           <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />
