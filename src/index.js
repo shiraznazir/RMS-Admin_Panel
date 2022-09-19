@@ -1,16 +1,16 @@
-if (!('process' in window)) {
-  // @ts-ignore
-  window.process = {}
-}
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from 'react-redux';
+import store from './Components/store/store'
 import './index.css';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Provider store={store} >
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );

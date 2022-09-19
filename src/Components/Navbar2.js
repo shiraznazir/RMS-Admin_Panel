@@ -30,18 +30,19 @@ import Dashboard2 from "./Dashboard2";
 import OrderedItem from "./OrderedItem";
 import Menu from "./Menu";
 import Stocks from "./Stocks";
-import RightBar from "./RightBar";
 import { useState } from "react";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-import Login from './Login'
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "../Components/store/reducer/userSlice";
+import { logout } from "./store/reducer/userSlice";
 
 const drawerWidth = 240;
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Hi, ", "Profile", "Account", "Dashboard", "Logout"];
 const notification = [
   "Items Added to the Card",
   "Items created successfully",
@@ -151,12 +152,21 @@ export default function Navbar2() {
   const opening = Boolean(anchorEl);
   const id = opening ? "simple-popover" : undefined;
 
+  const user = useSelector(selectUser);
+
+  const dispatch = useDispatch();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+  };
+
   const drawerList = [
-    {name:'Dashboard',icon:<DashboardIcon/>},
-    {name:'OrderedItem',icon:<ShoppingCartIcon />},
-    {name:'Menu',icon:<RestaurantMenuIcon />},
-    {name:'Stocks',icon:<AutoGraphIcon/>}
-  ]
+    { name: "Dashboard", icon: <DashboardIcon /> },
+    { name: "OrderedItem", icon: <ShoppingCartIcon /> },
+    { name: "Menu", icon: <RestaurantMenuIcon /> },
+    { name: "Stocks", icon: <AutoGraphIcon /> },
+  ];
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -204,18 +214,18 @@ export default function Navbar2() {
                   horizontal: "left",
                 }}
               >
-                <Box m='2' p='3' sx={{bgcolor: "##F1F1F0"}} >
+                <Box m="2" p="3" sx={{ bgcolor: "##F1F1F0" }}>
                   {notification.map((element) => {
                     return (
                       <Box>
                         <Stack direction="row" alignItems="center" gap={1}>
                           {/* <Tooltip title="Open settings"> */}
-                            <IconButton sx={{ p: 0, m: 2 }}>
-                              <Avatar
-                                alt="Remy Sharp"
-                                src="/static/images/avatar/2.jpg"
-                              />
-                            </IconButton>
+                          <IconButton sx={{ p: 0, m: 2 }}>
+                            <Avatar
+                              alt="Remy Sharp"
+                              src="/static/images/avatar/2.jpg"
+                            />
+                          </IconButton>
                           {/* </Tooltip> */}
                           <Typography sx={{ p: 2, color: "#6A7189" }}>
                             {element}
@@ -255,7 +265,22 @@ export default function Navbar2() {
                   }}
                 >
                   {settings.map((setting) => {
-                    return <Typography sx={{ p: 2 }}>{setting}</Typography>;
+                    return setting === "Hi, " ? (
+                      <Typography sx={{ p: 2, width: "200px" }}>
+                        {setting + user.username}
+                      </Typography>
+                    ) : setting === "Logout" ? (
+                      <Button
+                        sx={{ p: 2, width: "200px" }}
+                        onClick={(e) => handleLogout(e)}
+                      >
+                        {setting}
+                      </Button>
+                    ) : (
+                      <Typography sx={{ p: 2, width: "200px" }}>
+                        {setting}
+                      </Typography>
+                    );
                   })}
                 </Popover>
               </div>
@@ -282,13 +307,15 @@ export default function Navbar2() {
         <List>
           {drawerList.map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <Link style={{ textDecoration: 'none', color: 'white' }} to={text.name}>
+              <Link
+                style={{ textDecoration: "none", color: "white" }}
+                to={text.name}
+              >
                 <ListItemButton
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
                     px: 2.5,
-                    
                   }}
                 >
                   <ListItemIcon
@@ -300,7 +327,10 @@ export default function Navbar2() {
                   >
                     {text.icon}
                   </ListItemIcon>
-                  <ListItemText primary={text.name} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText
+                    primary={text.name}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -310,7 +340,7 @@ export default function Navbar2() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Dashboard2 />} />
           <Route path="/dashboard" element={<Dashboard2 />} />
           <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />

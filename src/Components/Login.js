@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "./store/reducer/userSlice";
+
 import {
   Grid,
   Paper,
@@ -13,9 +16,9 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const paperStyle = {
-  padding: 20,
+  padding: 40,
   height: "70vh",
-  width: 300,
+  width: 350,
   margin: "20px auto",
 };
 
@@ -28,6 +31,23 @@ const btnStyle = {
 }
 
 function Login() {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      dispatch(
+        login({
+          username: username,
+          password: password,
+          loggedIn: true
+        })
+      )
+  }
+
   return (
     <Grid>
       <Paper elevation={10} style={paperStyle}>
@@ -40,6 +60,7 @@ function Login() {
           <TextField
             label="Username"
             placeholder="Enter Username"
+            onChange={(e)=> setUsername(e.target.value)}
             fullWidth
             required
           />
@@ -47,6 +68,7 @@ function Login() {
             sx={{margin: "8px 0"}}
             label="Password"
             placeholder="Enter Password"
+            onChange={(e)=> setPassword(e.target.value)}
             type="password"
             fullWidth
             required
@@ -55,8 +77,9 @@ function Login() {
           <FormControlLabel
             control={<Checkbox name="checkedB" color="primary" />}
             label="Remember me"
+            
           />
-          <Button type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
+          <Button onClick={(e) => handleSubmit(e)} type="submit" color="primary" variant="contained" style={btnStyle} fullWidth>
             Sign In
           </Button>
         
