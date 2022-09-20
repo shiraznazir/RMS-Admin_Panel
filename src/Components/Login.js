@@ -10,7 +10,7 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
-  Typography,
+  Typography, 
   Link,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -19,7 +19,7 @@ const paperStyle = {
   padding: 40,
   height: "70vh",
   width: 350,
-  margin: "20px auto",
+  margin: '100px auto'
 };
 
 const avatarStyle = {

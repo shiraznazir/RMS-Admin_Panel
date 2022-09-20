@@ -40,6 +40,7 @@ import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../Components/store/reducer/userSlice";
 import { logout } from "./store/reducer/userSlice";
+import Form from './Form';
 
 const drawerWidth = 240;
 const settings = ["Hi, ", "Profile", "Account", "Dashboard", "Logout"];
@@ -264,24 +265,26 @@ export default function Navbar2() {
                     horizontal: "left",
                   }}
                 >
-                  {settings.map((setting) => {
-                    return setting === "Hi, " ? (
-                      <Typography sx={{ p: 2, width: "200px" }}>
-                        {setting + user.username}
-                      </Typography>
-                    ) : setting === "Logout" ? (
-                      <Button
-                        sx={{ p: 2, width: "200px" }}
-                        onClick={(e) => handleLogout(e)}
-                      >
-                        {setting}
-                      </Button>
-                    ) : (
-                      <Typography sx={{ p: 2, width: "200px" }}>
-                        {setting}
-                      </Typography>
-                    );
-                  })}
+                  <Grid container direction="column" >
+                    {settings.map((setting) => {
+                      return setting === "Hi, " ? (
+                        <Typography sx={{ p: 2, width: "200px", textAlign: 'center' }}>
+                          {setting + user.username}
+                        </Typography>
+                      ) : setting === "Logout" ? (
+                        <Button
+                          sx={{ p: 2, width: "200px" }}
+                          onClick={(e) => handleLogout(e)}
+                        >
+                          {setting}
+                        </Button>
+                      ) : (
+                        <Button sx={{ p: 2, width: "200px" }}>
+                          {setting}
+                        </Button>
+                      );
+                    })}
+                  </Grid>
                 </Popover>
               </div>
             </Grid>
@@ -329,7 +332,7 @@ export default function Navbar2() {
                   </ListItemIcon>
                   <ListItemText
                     primary={text.name}
-                    sx={{ opacity: open ? 1 : 0 }}
+                    sx={{ opacity: open ? 1 : 0, color: '#3385ff' }}
                   />
                 </ListItemButton>
               </Link>
@@ -345,6 +348,7 @@ export default function Navbar2() {
           <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />
           <Route path="/Stocks" element={<Stocks />} />
+          <Route path="/form" element={<Form />} />
         </Routes>
       </Box>
     </Box>

@@ -1,10 +1,11 @@
+import { Grid, Typography } from "@mui/material";
 import React from "react";
 
 function Stocks() {
   return (
-    <div>
-      <h1>FAQ?</h1>
-    </div>
+    <Grid>
+      <Typography variant="h1" align="center" mt={25} sx={{color: '#2e4cdc'}} >FAQ?</Typography>
+    </Grid>
   );
 }
 

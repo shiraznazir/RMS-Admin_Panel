@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Typography, Box, Grid, Button, Modal } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -50,7 +51,7 @@ function Menu() {
       sx={{ bgcolor: "#f0f1f1", width: "100%", borderRadius: "10px" }}
     >
       <Grid m={2} container spacing={2}>
-        <Grid item xs={9}>
+        <Grid item xs={12} md={8} lg={9} >
           <Typography
             p="2"
             variant="h5"
@@ -63,12 +64,17 @@ function Menu() {
             Here is your Menu Items list data
           </Typography>
         </Grid>
-        <Grid item xs={3}>
-          <Button variant="outlined">
-            <ControlPointIcon sx={{ marginRight: "10px" }} />
-            Add Menu Items
-            <KeyboardArrowDownIcon />
-          </Button>
+        <Grid item mt={3} xs={12} md={4} lg={3} >
+          <Link to="/form">
+            <Button
+              variant="outlined"
+              sx={{ textDecoration: "none", bgcolor: "#dde0ef" }}
+            >
+              <ControlPointIcon sx={{ marginRight: "10px" }} />
+              Add Menu Items
+              <KeyboardArrowDownIcon />
+            </Button>
+          </Link>
         </Grid>
       </Grid>
       <Box m={4} sx={{ borderRadius: "100px" }}>
@@ -117,7 +123,9 @@ function Menu() {
                   <TableCell align="centre">{row.name}</TableCell>
                   <TableCell align="centre">{row.price}</TableCell>
                   <TableCell align="centre">
-                    <EditIcon fontSize="large" />
+                    <Link to="/form">
+                      <EditIcon fontSize="large" />
+                    </Link>
                   </TableCell>
                   <TableCell align="centre">
                     <ClearIcon
@@ -140,7 +148,7 @@ function Menu() {
                         >
                           Are you sure to delete the item
                         </Typography>
-                        <Stack direction='row' spacing={5} m={2} >
+                        <Stack direction="row" spacing={5} m={2}>
                           <Button variant="contained">Yes</Button>
                           <Button variant="contained">No</Button>
                         </Stack>

@@ -86,13 +86,7 @@ function Menu() {
             Here is your order list data
           </Typography>
         </Grid>
-        <Grid item xs={3}>
-          <Button variant="outlined">
-            <ControlPointIcon sx={{ marginRight: "10px" }} />
-            Add Menu Items
-            <KeyboardArrowDownIcon />
-          </Button>
-        </Grid>
+       
       </Grid>
       <Box m={4} sx={{ borderRadius: "100px" }}>
         <TableContainer m={3} component={Paper}>
