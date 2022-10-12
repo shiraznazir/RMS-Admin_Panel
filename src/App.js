@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useEffect } from 'react'
 import { Routes, Route } from "react-router-dom";
 import  Navbar from './Components/Navbar'
 import Navbar2 from './Components/Navbar2'
@@ -14,6 +14,12 @@ import { selectUser } from './Components/store/reducer/userSlice';
 function App() {
 
   const user = useSelector(selectUser);
+
+  useEffect(() => {
+    window.process = {
+      ...window.process,
+    };
+  }, []);
 
   return (
     <div>

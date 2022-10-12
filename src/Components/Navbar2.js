@@ -37,10 +37,13 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import CategoryIcon from '@mui/icons-material/Category';
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../Components/store/reducer/userSlice";
 import { logout } from "./store/reducer/userSlice";
-import Form from './Form';
+import AddMenu from "./AddMenu";
+import Categories from './Categories';
+import AddCategories from './AddCategories'
 
 const drawerWidth = 240;
 const settings = ["Hi, ", "Profile", "Account", "Dashboard", "Logout"];
@@ -118,6 +121,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Navbar2() {
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -167,6 +171,7 @@ export default function Navbar2() {
     { name: "OrderedItem", icon: <ShoppingCartIcon /> },
     { name: "Menu", icon: <RestaurantMenuIcon /> },
     { name: "Stocks", icon: <AutoGraphIcon /> },
+    { name: "Categories", icons: <CategoryIcon />}
   ];
 
   return (
@@ -348,7 +353,10 @@ export default function Navbar2() {
           <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />
           <Route path="/Stocks" element={<Stocks />} />
-          <Route path="/form" element={<Form />} />
+          <Route path="/addmenu" element={<AddMenu />} />
+          <Route path="/edit/:id" element={<AddMenu />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/addcategories" element={<AddCategories />} />
         </Routes>
       </Box>
     </Box>

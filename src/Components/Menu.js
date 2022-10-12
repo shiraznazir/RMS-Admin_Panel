@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useParams  } from "react-router-dom";
 import { Typography, Box, Grid, Button, Modal } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -12,7 +12,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
-import { Stack } from "@mui/system";
+import { Stack } from "@mui/system"
+import { getMenuItems, deleteMenuItem } from '../api/api'
+import  { setMenuItems } from './store/reducer/menuItemsSlice'
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 const style = {
   position: "absolute",
@@ -24,26 +28,33 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-};
-
-function createData(id, name, price) {
-  return { id, name, price };
 }
 
-const rows = [
-  createData("#1221", "Paneer", "$240"),
-  createData("#1222", "Butter Chicken", "$540"),
-  createData("#1223", "Korma Chicken", "$450"),
-  createData("#1224", "Moradabadi Biryani", "$300"),
-  createData("#1225", "Hydrabadi Biryani", "$300"),
-  createData("#1226", "Mutton Biryani", "$350"),
-  createData("#1227", "Mutton Korma", "$600"),
-];
+const tableHeader = { fontWeight: "bold", fontSize: "15px" }
 
 function Menu() {
+
+  const menuItems = useSelector((state)=> state.menuItems.menuItems)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(()=>{
+    getMenuItems().then((val)=>{
+      dispatch(setMenuItems(val.data));
+    }).catch((err=>{
+      console.log("Error ", err);
+    }))
+  }, [])
+
+
+  const handleDelete = (id) => {
+    deleteMenuItem(id)
+    navigate('/Menu')
+  }
 
   return (
     <Box
@@ -65,7 +76,7 @@ function Menu() {
           </Typography>
         </Grid>
         <Grid item mt={3} xs={12} md={4} lg={3} >
-          <Link to="/form">
+          <Link to="/addmenu">
             <Button
               variant="outlined"
               sx={{ textDecoration: "none", bgcolor: "#dde0ef" }}
@@ -84,30 +95,36 @@ function Menu() {
             aria-label="caption table"
           >
             <TableHead>
-              <TableRow sx={{ fontWeight: "bold", fontSize: "20px" }}>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "20px" }}>
+              <TableRow sx={ tableHeader }>
+                <TableCell sx={ tableHeader }>
                   Menu Items No
                 </TableCell>
                 <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "20px" }}
+                  sx={ tableHeader }
                   align="centre"
                 >
                   Menu Items Name
                 </TableCell>
                 <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "20px" }}
+                  sx={ tableHeader }
+                  align="centre"
+                >
+                  Veg
+                </TableCell>
+                <TableCell
+                  sx={ tableHeader }
                   align="centre"
                 >
                   Amount
                 </TableCell>
                 <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "20px" }}
+                  sx={ tableHeader }
                   align="centre"
                 >
                   Edit
                 </TableCell>
                 <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "20px" }}
+                  sx={ tableHeader }
                   align="centre"
                 >
                   Remove
@@ -115,15 +132,16 @@ function Menu() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.id}>
+              {menuItems.map((item) => (
+                  <TableRow key={item._id}>
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    {item._id}
                   </TableCell>
-                  <TableCell align="centre">{row.name}</TableCell>
-                  <TableCell align="centre">{row.price}</TableCell>
+                  <TableCell align="centre">{item.name}</TableCell>
+                  <TableCell align="centre">{item.isVeg}</TableCell>
+                  <TableCell align="centre">{item.price}</TableCell>
                   <TableCell align="centre">
-                    <Link to="/form">
+                    <Link to={`/edit/${item._id}`}>
                       <EditIcon fontSize="large" />
                     </Link>
                   </TableCell>
@@ -149,7 +167,7 @@ function Menu() {
                           Are you sure to delete the item
                         </Typography>
                         <Stack direction="row" spacing={5} m={2}>
-                          <Button variant="contained">Yes</Button>
+                          <Button onClick={()=> handleDelete(item._id)} variant="contained">Yes</Button>
                           <Button variant="contained">No</Button>
                         </Stack>
                       </Box>

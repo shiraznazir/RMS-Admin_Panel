@@ -19,7 +19,7 @@ const paperStyle = {
   padding: 40,
   height: "70vh",
   width: 350,
-  margin: '100px auto'
+  margin: '50px auto'
 };
 
 const avatarStyle = {
@@ -46,8 +46,9 @@ function Login() {
           loggedIn: true
         })
       )
+      console.log("User Login :- ", username, password);
   }
-
+ 
   return (
     <Grid>
       <Paper elevation={10} style={paperStyle}>
