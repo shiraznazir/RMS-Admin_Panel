@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useParams  } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Typography, Box, Grid, Button, Modal } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -12,11 +12,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
-import { Stack } from "@mui/system"
-import { getMenuItems, deleteMenuItem } from '../api/api'
-import  { setMenuItems } from './store/reducer/menuItemsSlice'
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Stack } from "@mui/system";
+import { getMenuItems, deleteMenuItem } from "../api/api";
+import { setMenuItems } from "./store/reducer/menuItemsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -28,33 +28,40 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-}
+};
 
-const tableHeader = { fontWeight: "bold", fontSize: "15px" }
+const tableHeader = { fontWeight: "bold", fontSize: "15px" };
 
 function Menu() {
-
-  const menuItems = useSelector((state)=> state.menuItems.menuItems)
+  const menuItems = useSelector((state) => state.menuItems.menuItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    setOpen(true)
+    navigate("/menu");
+  };
+  const handleClose = () => {
+    setOpen(false)
+  };
 
-  useEffect(()=>{
-    getMenuItems().then((val)=>{
-      dispatch(setMenuItems(val.data));
-    }).catch((err=>{
-      console.log("Error ", err);
-    }))
-  }, [])
-
+  useEffect(() => {
+    getMenuItems()
+      .then((val) => {
+        dispatch(setMenuItems(val.data));
+      })
+      .catch((err) => {
+        console.log("Error ", err);
+      });
+  }, []);
 
   const handleDelete = (id) => {
-    deleteMenuItem(id)
-    navigate('/Menu')
-  }
+    deleteMenuItem(id);
+    navigate("/menu");
+  };
+
+  console.log("Menu Items:- ", menuItems);
 
   return (
     <Box
@@ -62,7 +69,7 @@ function Menu() {
       sx={{ bgcolor: "#f0f1f1", width: "100%", borderRadius: "10px" }}
     >
       <Grid m={2} container spacing={2}>
-        <Grid item xs={12} md={8} lg={9} >
+        <Grid item xs={12} md={8} lg={9}>
           <Typography
             p="2"
             variant="h5"
@@ -75,7 +82,7 @@ function Menu() {
             Here is your Menu Items list data
           </Typography>
         </Grid>
-        <Grid item mt={3} xs={12} md={4} lg={3} >
+        <Grid item mt={3} xs={12} md={4} lg={3}>
           <Link to="/addmenu">
             <Button
               variant="outlined"
@@ -95,51 +102,42 @@ function Menu() {
             aria-label="caption table"
           >
             <TableHead>
-              <TableRow sx={ tableHeader }>
-                <TableCell sx={ tableHeader }>
-                  Menu Items No
-                </TableCell>
-                <TableCell
-                  sx={ tableHeader }
-                  align="centre"
-                >
+              <TableRow sx={tableHeader}>
+                <TableCell sx={tableHeader}>Menu Items No</TableCell>
+                <TableCell sx={tableHeader} align="centre">
                   Menu Items Name
                 </TableCell>
-                <TableCell
-                  sx={ tableHeader }
-                  align="centre"
-                >
+                <TableCell sx={tableHeader} align="centre">
                   Veg
                 </TableCell>
-                <TableCell
-                  sx={ tableHeader }
-                  align="centre"
-                >
-                  Amount
+                <TableCell sx={tableHeader} align="centre">
+                  Full Price
                 </TableCell>
-                <TableCell
-                  sx={ tableHeader }
-                  align="centre"
-                >
+                <TableCell sx={tableHeader} align="centre">
+                  Half Price
+                </TableCell>
+                <TableCell sx={tableHeader} align="centre">
+                  Quater Price
+                </TableCell>
+                <TableCell sx={tableHeader} align="centre">
                   Edit
                 </TableCell>
-                <TableCell
-                  sx={ tableHeader }
-                  align="centre"
-                >
+                <TableCell sx={tableHeader} align="centre">
                   Remove
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {menuItems.map((item) => (
-                  <TableRow key={item._id}>
+                <TableRow key={item._id}>
                   <TableCell component="th" scope="row">
                     {item._id}
                   </TableCell>
                   <TableCell align="centre">{item.name}</TableCell>
                   <TableCell align="centre">{item.isVeg}</TableCell>
-                  <TableCell align="centre">{item.price}</TableCell>
+                  <TableCell align="centre">{item.price ? item.price : item.fullPrice}</TableCell>
+                  <TableCell align="centre">{item.halfPrice ? item.halfPrice : "-" }</TableCell>
+                  <TableCell align="centre">{item.quaterPrice ? item.quaterPrice : "-"}</TableCell>
                   <TableCell align="centre">
                     <Link to={`/edit/${item._id}`}>
                       <EditIcon fontSize="large" />
@@ -167,8 +165,16 @@ function Menu() {
                           Are you sure to delete the item
                         </Typography>
                         <Stack direction="row" spacing={5} m={2}>
-                          <Button onClick={()=> handleDelete(item._id)} variant="contained">Yes</Button>
-                          <Button variant="contained">No</Button>
+                          <Button
+                            onClick={() => {
+                              handleDelete(item._id);
+                              handleClose()
+                            }}
+                            variant="contained"
+                          >
+                            Yes
+                          </Button>
+                          <Button onClick={handleClose} variant="contained">No</Button>
                         </Stack>
                       </Box>
                     </Modal>

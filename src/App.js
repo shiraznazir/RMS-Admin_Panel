@@ -1,21 +1,22 @@
 import React,{ useEffect } from 'react'
-import { Routes, Route } from "react-router-dom";
-import  Navbar from './Components/Navbar'
-import Navbar2 from './Components/Navbar2'
-import Dashboard from './Components/Dashboard'
-import OrderedItem from './Components/OrderedItem'
-import Menu from './Components/Menu';
-import Stocks from './Components/Stocks'
-import Dashboard2 from './Components/Dashboard2';
+import Navbar from './Components/Navbar'
 import Login from './Components/Login';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUser } from './Components/store/reducer/userSlice';
+import { useDispatch } from 'react-redux'
+import { login } from "./Components/store/reducer/userSlice";
 
 function App() {
 
+  const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  console.log("User1 " , user);
 
   useEffect(() => {
+    const browerData = document.cookie
+    dispatch(
+      login(browerData)
+    )
     window.process = {
       ...window.process,
     };
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <div>
-      {user ? <Navbar2 /> : <Login />}  
+      {user ? <Navbar /> : <Login />}  
     </div>
   )
 }

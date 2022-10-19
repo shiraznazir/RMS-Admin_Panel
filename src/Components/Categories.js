@@ -10,11 +10,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { getCategories } from '../api/api'
+import { getCategories, deleteCategorie } from "../api/api";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
-function Menu() {
-
+function Categories() {
   const [categories, setCategories] = useState([]);
+  const naviagate = useNavigate();
 
   useEffect(() => {
     getCategories()
@@ -26,6 +29,12 @@ function Menu() {
       });
   }, []);
 
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    deleteCategorie(id);
+    naviagate("/categories");
+  };
+
   console.log("000000000", categories);
 
   return (
@@ -34,7 +43,7 @@ function Menu() {
       sx={{ bgcolor: "#f0f1f1", width: "100%", borderRadius: "10px" }}
     >
       <Grid m={2} container spacing={2}>
-        <Grid item xs={12} md={8} lg={9} >
+        <Grid item xs={12} md={8} lg={9}>
           <Typography
             p="2"
             variant="h5"
@@ -47,14 +56,11 @@ function Menu() {
             Here is your Categories list data
           </Typography>
         </Grid>
-        <Grid item mt={3} xs={12} md={4} lg={3} >
-          <Link to="/addcategories" sx={{textDecoration: "none"}}>
-            <Button
-              variant="outlined"
-              sx={{ bgcolor: "#dde0ef" }}
-            >
+        <Grid item mt={3} xs={12} md={4} lg={3}>
+          <Link to="/addcategories" sx={{ textDecoration: "none" }}>
+            <Button variant="outlined" sx={{ bgcolor: "#dde0ef" }}>
               <ControlPointIcon sx={{ marginRight: "10px" }} />
-                Add Categories
+              Add Categories
               <KeyboardArrowDownIcon />
             </Button>
           </Link>
@@ -83,6 +89,12 @@ function Menu() {
                 >
                   Status
                 </TableCell>
+                <TableCell
+                  sx={{ fontWeight: "bold", fontSize: "20px" }}
+                  align="centre"
+                >
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -93,6 +105,18 @@ function Menu() {
                   </TableCell>
                   <TableCell align="centre">{categorie.title}</TableCell>
                   <TableCell align="centre">{categorie.status}</TableCell>
+                  <TableCell align="centre">
+                    <Link
+                      to={`/editCategories/${categorie._id}`}
+                      sx={{ textDecoration: "none" }}
+                    >
+                      <EditIcon sx={{ color: "#000000" }} />
+                    </Link>
+                    <DeleteIcon
+                      onClick={(e) => handleDelete(e, categorie._id)}
+                      sx={{ color: "#FF0000" }}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -103,4 +127,4 @@ function Menu() {
   );
 }
 
-export default Menu;
+export default Categories;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { login } from "./store/reducer/userSlice";
 
 import {
@@ -36,6 +37,7 @@ function Login() {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
       e.preventDefault();
@@ -46,7 +48,10 @@ function Login() {
           loggedIn: true
         })
       )
-      console.log("User Login :- ", username, password);
+      document.cookie = `username=${username}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
+      document.cookie = `password=${password}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
+      document.cookie = `loggedIn=${true}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
+      navigate('/')
   }
  
   return (
