@@ -47,3 +47,7 @@ export const editCategorie = (id, data) =>{
 export const insertAdmin = (data) =>{
     return axios.post(`/admin/`, data)
 }
+
+export const getOrders = () =>{
+    return axios.get(`/order/`)
+}

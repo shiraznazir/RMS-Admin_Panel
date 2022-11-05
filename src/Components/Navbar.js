@@ -175,7 +175,7 @@ export default function Navbar() {
     { name: "Stocks", icon: <AutoGraphIcon /> },
     { name: "Categories", icons: <CategoryIcon />}
   ];
-
+  // console.log("NAvbar>>>>>>>>>>",anchorEl);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -347,7 +347,7 @@ export default function Navbar() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
         <Routes>
           <Route path="/" element={<Dashboard />} />

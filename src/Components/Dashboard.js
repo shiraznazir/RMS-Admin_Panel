@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -14,12 +14,45 @@ import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import GroupIcon from "@mui/icons-material/Group";
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { getOrders } from "../api/api";
 
-function Dashboard2() {
+const tableHeader = { fontWeight: "bold", fontSize: "20px" };
+
+function Dashboard() {
+  let count = 1;
+  const [orders, setOrders] = useState();
+
+  const fetchOrders = () => {
+    getOrders()
+      .then((res) => {
+        // console.log(res.data);
+        setOrders(res.data);
+      })
+      .catch((err) => {
+        console.log("Error ", err);
+      });
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  console.log("Orders:-", orders);
+
   return (
-    <div style={{ backgroundColor: "#f0f1f1", margin: 0, padding: 0 }}>
-      <Typography
+    <div style={{ backgroundColor: "#f0f1f1" }}>
+      {/* <Typography
         variant="h4"
         component="div"
         sx={{ textAlign: "left", color: "#3385ff", fontWeight: "bold", m: 2 }}
@@ -28,7 +61,7 @@ function Dashboard2() {
       </Typography>
       <Typography variant="h6" sx={{ m: 2 }}>
         Welcome to RMS Admin Panel!
-      </Typography>
+      </Typography> */}
       <Container sx={{ width: "100%" }}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={4}>
@@ -58,7 +91,7 @@ function Dashboard2() {
                       <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
                         56
                       </Typography>
-                      <Typography>TOTAL MENUS</Typography>
+                      <Typography>PENDING ORDERS</Typography>
                     </div>
                   </Stack>
                 </CardContent>
@@ -86,13 +119,13 @@ function Dashboard2() {
                         borderRadius: "50%",
                       }}
                     >
-                      <CurrencyRupeeIcon fontSize="large" sx={{ m: 2.5 }} />
+                      <RestaurantMenuIcon fontSize="large" sx={{ m: 2.5 }} />
                     </Box>
                     <div>
                       <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
-                        12k
+                        12
                       </Typography>
-                      <Typography>TOTAL REVENUE</Typography>
+                      <Typography>TOTAL ORDER DELIVERED</Typography>
                     </div>
                   </Stack>
                 </CardContent>
@@ -120,20 +153,108 @@ function Dashboard2() {
                         borderRadius: "50%",
                       }}
                     >
-                      <InventoryIcon fontSize="large" sx={{ m: 2.5 }} />
+                      <AccountBalanceWalletIcon
+                        fontSize="large"
+                        sx={{ m: 2.5 }}
+                      />
                     </Box>
                     <div>
                       <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
                         25
                       </Typography>
-                      <Typography>TOTAL ORDER</Typography>
+                      <Typography>TOTAL SALES</Typography>
                     </div>
                   </Stack>
                 </CardContent>
               </CardActionArea>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6} lg={4}>
+          {/* Ordered Item details table */}
+          <Grid>
+            <TableContainer sx={{ ml: 5 }} component={Paper}>
+              <Table
+                sx={{ minWidth: 650, borderRadius: "100px" }}
+                aria-label="caption table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={tableHeader}>Order Id</TableCell>
+                    <TableCell sx={tableHeader} align="right">
+                      Order Name
+                    </TableCell>
+                    <TableCell sx={tableHeader} align="right">
+                      Portion
+                    </TableCell>
+                    <TableCell sx={tableHeader} align="right">
+                      User Details{" "}
+                    </TableCell>
+                    <TableCell sx={tableHeader} align="right">
+                      Payment
+                    </TableCell>
+                    <TableCell sx={tableHeader} align="right">
+                      Time
+                    </TableCell>
+                    <TableCell sx={tableHeader} align="center">
+                      Action
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* {orders?.map((order)=>{
+                    console.log("Order??????>>>>>>>>", order);
+                  })} */}
+                  {orders?.map((order) => (
+                    <TableRow
+                      key={count}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {count++}
+                      </TableCell>
+                      <TableCell align="left">{order.productId.name}</TableCell>
+                      <TableCell align="left">
+                        {order.productFull
+                          ? "Full"
+                          : order.productHalf
+                          ? "Half"
+                          : order.productQuater
+                          ? "Quater"
+                          : "-"}
+                      </TableCell>
+                      <TableCell align="right">{order.userId.mobNo}</TableCell>
+                      <TableCell align="right">Payment</TableCell>
+                      <TableCell align="right">12:00</TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          sx={{
+                            bgcolor: "#009933",
+                            color: "#FFF",
+                            "&:hover": {
+                              backgroundColor: "#77dd77",
+                              color: "#FFF",
+                            },
+                          }}
+                        >
+                          Accept <CheckCircleOutlineIcon sx={{ ml: 1 }} />
+                        </Button>
+                        <Button
+                          sx={{ ml: 1, bgcolor: "#FF0000", "&:hover": {
+                            backgroundColor: "#ff726f",
+                            color: "#FFF",
+                          }, }}
+                          variant="contained"
+                        >
+                          Reject <CancelIcon sx={{ ml: 1 }} />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <Card
               sx={{
                 maxWidth: 345,
@@ -237,7 +358,7 @@ function Dashboard2() {
                 </CardContent>
               </CardActionArea>
             </Card>
-          </Grid>
+          </Grid> */}
         </Grid>
 
         <Grid container spacing={2}>
@@ -297,8 +418,8 @@ function Dashboard2() {
                         New Orders
                       </Typography>
                       <Typography
-                         align='right'
-                         sx={{ fontWeight: "bold",marginLeft:23 }}
+                        align="right"
+                        sx={{ fontWeight: "bold", marginLeft: 23 }}
                       >
                         Manage Orders
                       </Typography>
@@ -403,4 +524,4 @@ function Dashboard2() {
   );
 }
 
-export default Dashboard2;
+export default Dashboard;
