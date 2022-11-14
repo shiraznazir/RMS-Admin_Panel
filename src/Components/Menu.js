@@ -42,6 +42,7 @@ function Menu() {
     setOpen(true)
     navigate("/menu");
   };
+  
   const handleClose = () => {
     setOpen(false)
   };
@@ -131,7 +132,7 @@ function Menu() {
               {menuItems.map((item) => (
                 <TableRow key={item._id}>
                   <TableCell component="th" scope="row">
-                    {item._id}
+                    {item.id}
                   </TableCell>
                   <TableCell align="centre">{item.name}</TableCell>
                   <TableCell align="centre">{item.isVeg}</TableCell>

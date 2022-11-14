@@ -29,6 +29,7 @@ import Stocks from "./Stocks";
 import { useState } from "react";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
+import ComputerIcon from '@mui/icons-material/Computer';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
@@ -173,7 +174,7 @@ export default function Navbar() {
     { name: "OrderedItem", icon: <ShoppingCartIcon /> },
     { name: "Menu", icon: <RestaurantMenuIcon /> },
     { name: "Stocks", icon: <AutoGraphIcon /> },
-    { name: "Categories", icons: <CategoryIcon />}
+    { name: "Categories", icons: <ComputerIcon />}
   ];
   // console.log("NAvbar>>>>>>>>>>",anchorEl);
   return (
@@ -316,6 +317,7 @@ export default function Navbar() {
         <Divider />
         <List>
           {drawerList.map((text, index) => (
+            // console.log("Test>>>>>>>>", text)
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <Link
                 style={{ textDecoration: "none", color: "white" }}

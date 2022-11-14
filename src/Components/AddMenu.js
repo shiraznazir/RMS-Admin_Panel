@@ -56,7 +56,7 @@ function AddMenu() {
   const [quaterPrice, setQuaterPrice] = useState("");
   const [isVeg, setIsVeg] = useState("Veg");
   const [fileName, setFileName] = useState("");
-  const [message,setMessage] = useState("")
+  const [message, setMessage] = useState("");
   const [checked, setChecked] = useState({
     full: false,
     half: false,
@@ -66,30 +66,47 @@ function AddMenu() {
   const [categories, setCategories] = React.useState([]);
 
   const validate = () => {
-    let err = []
-    if(name.length < 3 ){
-      err.push("Name should 3 characters long")
+    let err = [];
+    if (name.length < 3) {
+      err.push("Name should 3 characters long");
     }
-    if(selectCategories.length < 3 ){
-      err.push("Name should 3 characters long")
+    if (selectCategories.length < 3) {
+      err.push("Name should 3 characters long");
     }
-    if(!portion && price <= 0){
-      err.push("Price should be a greated than 0")
+    if (!portion && price <= 0) {
+      err.push("Price should be a greated than 0");
     }
-    if((portion && (fullPrice <= 0 || halfPrice <=0 || quaterPrice <=0 ))){
-      err.push("Portion price is required.")
+    if (portion && (fullPrice <= 0 || halfPrice <= 0 || quaterPrice <= 0)) {
+      err.push("Portion price is required.");
     }
-    if(err.length > 0 ){
-      setError(err)
-      return false
+    if (err.length > 0) {
+      setError(err);
+      return false;
+    } else {
+      return true;
     }
-    else {
-      return true
-    }
-  }
+  };
+
+  const generateRandomNoID = () => {
+    let randomNumber = Math.floor(100000 + Math.random() * 900000);
+    randomNumber = String(randomNumber);
+    randomNumber = randomNumber.substring(0, 4);
+    return "mi_" + randomNumber;
+  };
+
   const createData = () => {
-  
+    let id = generateRandomNoID();
+
+    menuItems.map((item)=>{
+      if(item.id === id){
+        id = generateRandomNoID();
+      }
+    })
+
+    console.log("ffsf:", id);
+
     const formData = new FormData();
+    formData.append("id", id);
     formData.append("name", name);
     formData.append("category", selectCategories);
     formData.append("portion", portion);
@@ -106,21 +123,20 @@ function AddMenu() {
 
   const addMenuItem = (e) => {
     e.preventDefault();
-    let valid = validate()
-   if(valid) {
-    const formData = createData();
-    insertMenuItem(formData).then((res)=> {
-    console.log("add",res)
-    setMessage(res.data.message)
-    //console.log("res>>>>>>>>>>>>" , res.data.status);
-    if(res.data.status){
-      setTimeout(() => {
-        navigate("/Menu");
-      }, 1500);
+    let valid = validate();
+    if (valid) {
+      const formData = createData();
+      insertMenuItem(formData).then((res) => {
+        console.log("add", res);
+        setMessage(res.data.message);
+        //console.log("res>>>>>>>>>>>>" , res.data.status);
+        if (res.data.status) {
+          setTimeout(() => {
+            navigate("/Menu");
+          }, 1500);
+        }
+      });
     }
-    
-    });
-   }
   };
 
   const editItem = (e) => {
@@ -141,10 +157,10 @@ function AddMenu() {
   };
 
   const fetchCategories = () => {
-    console.log("res categ here",)
+    console.log("res categ here");
     getCategories()
       .then((response) => {
-        console.log("res categ",response)
+        console.log("res categ", response);
         setCategories(response.data);
       })
       .catch((err) => {
@@ -198,9 +214,9 @@ function AddMenu() {
     setFileName(e.target.files[0]);
   };
 
-  const handleCancel = () => navigate('/Menu');
+  const handleCancel = () => navigate("/Menu");
 
-  console.log("Categories 1212121 ", categories);
+  console.log("Menu Items 1212121 ", menuItems);
 
   return (
     <Box component="form" enctype="multipart/form-data">
@@ -225,12 +241,12 @@ function AddMenu() {
               Add Menu Items
             </Typography>
           )}
-          <Typography>
-            {message}
-          </Typography>
-          {error.map((er)=> <Typography fontWeight="bold"
-              align="center"
-              sx={{ color: "red" }}>{er}</Typography>)}
+          <Typography>{message}</Typography>
+          {error.map((er) => (
+            <Typography fontWeight="bold" align="center" sx={{ color: "red" }}>
+              {er}
+            </Typography>
+          ))}
           <Grid container spacing={1}>
             <Grid align="right" item xs={12} md={6}>
               <FormControl sx={{ mb: 2, mt: 2, width: "100%" }}>
@@ -242,8 +258,8 @@ function AddMenu() {
                   id="outlined-adornment-amount"
                   value={name}
                   onChange={(e) => {
-                    if(e.target.value.length < 30 && isNaN(e.target.value)){
-                      setName(e.target.value)
+                    if (e.target.value.length < 30 && isNaN(e.target.value)) {
+                      setName(e.target.value);
                     }
                   }}
                   label="Name"
