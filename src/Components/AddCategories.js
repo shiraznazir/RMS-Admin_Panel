@@ -36,10 +36,19 @@ function AddCategories() {
       });
   }, []);
 
+  const generateRandomNoID = () => {
+    let randomNumber = Math.floor(100000 + Math.random() * 900000);
+    randomNumber = String(randomNumber);
+    randomNumber = randomNumber.substring(0, 4);
+    return "cat_" + randomNumber;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    let id = generateRandomNoID();
+    // console.log("Check Category id>>>", id);
     insertCategories({
+      id: id,
       title: title,
     });
     naviagate("/categories");

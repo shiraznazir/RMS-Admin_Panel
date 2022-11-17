@@ -95,13 +95,14 @@ function AddMenu() {
   };
 
   const createData = () => {
+
     let id = generateRandomNoID();
 
-    menuItems.map((item)=>{
-      if(item.id === id){
-        id = generateRandomNoID();
+    const checkId = menuItems.filter((item) => item.id === id)
+    
+      if(checkId.length){
+        createData()
       }
-    })
 
     console.log("ffsf:", id);
 
@@ -258,7 +259,8 @@ function AddMenu() {
                   id="outlined-adornment-amount"
                   value={name}
                   onChange={(e) => {
-                    if (e.target.value.length < 30 && isNaN(e.target.value)) {
+                    console.log("Check type " , typeof(e.target.value));
+                    if (e.target.value.length < 30 ) {
                       setName(e.target.value);
                     }
                   }}

@@ -98,22 +98,27 @@ function Categories() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {categories?.map((categorie) => (
-                <TableRow key={categorie.id}>
+              {/* {
+                categories?.map((ele)=>{
+                  console.log("Cate ID", ele.id);
+                })
+              } */}
+              {categories?.map((category) => (
+                <TableRow key={category.id}>
                   <TableCell component="th" scope="row">
-                    {categorie._id}
+                    {category.id}
                   </TableCell>
-                  <TableCell align="centre">{categorie.title}</TableCell>
-                  <TableCell align="centre">{categorie.status}</TableCell>
+                  <TableCell align="centre">{category.title}</TableCell>
+                  <TableCell align="centre">{category.status}</TableCell>
                   <TableCell align="centre">
                     <Link
-                      to={`/editCategories/${categorie._id}`}
+                      to={`/editCategories/${category._id}`}
                       sx={{ textDecoration: "none" }}
                     >
                       <EditIcon sx={{ color: "#000000" }} />
                     </Link>
                     <DeleteIcon
-                      onClick={(e) => handleDelete(e, categorie._id)}
+                      onClick={(e) => handleDelete(e, category._id)}
                       sx={{ color: "#FF0000" }}
                     />
                   </TableCell>

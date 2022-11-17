@@ -6,6 +6,7 @@ export const getMenuItems = () =>{
 }
 
 export const getMenuItemsById = (id) =>{
+    console.log("IDs:-", id);
     return axios.get(`/menu/${id}`)
 }
 
@@ -50,4 +51,13 @@ export const insertAdmin = (data) =>{
 
 export const getOrders = () =>{
     return axios.get(`/order/`)
+}
+
+export const getOrderByStatus = () =>{
+    return axios.get(`/order/allOrder/`)
+}
+
+export const editOrder = (id, data) =>{
+    //console.log("Edit order >>>>>>>>", id, data);
+    return axios.put(`/order/${id}`, data)
 }
