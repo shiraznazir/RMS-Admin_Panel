@@ -22,7 +22,7 @@ import Popover from "@mui/material/Popover";
 import Grid from "@mui/material/Grid";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Button from "@mui/material/Button";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 import OrderedItem from "./OrderedItem";
 import Menu from "./Menu";
 import Stocks from "./Stocks";
@@ -35,9 +35,11 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import CategoryIcon from '@mui/icons-material/Category';
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "./store/reducer/userSlice";
 import { logout } from "./store/reducer/userSlice";
+import { useNavigate } from "react-router-dom";
 import AddMenu from "./AddMenu";
 import Categories from './Categories';
 import AddCategories from './AddCategories'
@@ -122,6 +124,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Navbar() {
 
   const theme = useTheme();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [notify, setNotify] = useState(null);
@@ -169,12 +172,16 @@ export default function Navbar() {
       `loggedIn=${false}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;`;
   };
 
+  const handleIcon = ()=>{
+    navigate('/')
+  }
+
   const drawerList = [
-    { name: "Dashboard", icon: <DashboardIcon /> },
+    // { name: "Dashboard", icon: <DashboardIcon /> },
     { name: "OrderedItem", icon: <ShoppingCartIcon /> },
     { name: "Menu", icon: <RestaurantMenuIcon /> },
     { name: "Stocks", icon: <AutoGraphIcon /> },
-    { name: "Categories", icons: <ComputerIcon />}
+    { name: "Category", icon: <CategoryIcon />}
   ];
   // console.log("NAvbar>>>>>>>>>>",anchorEl);
   return (
@@ -199,7 +206,7 @@ export default function Navbar() {
             </Grid>
 
             <Grid item xs={10.5} md={10}>
-              <Typography variant="h6" noWrap component="div">
+              <Typography onClick={handleIcon} variant="h6" noWrap component="div">
                 RMS
               </Typography>
             </Grid>
@@ -358,7 +365,7 @@ export default function Navbar() {
           <Route path="/Stocks" element={<Stocks />} />
           <Route path="/addmenu" element={<AddMenu />} />
           <Route path="/edit/:id" element={<AddMenu />} />
-          <Route path="/categories" element={<Categories />} />
+          <Route path="/category" element={<Categories />} />
           <Route path="/addcategories" element={<AddCategories />} />
           <Route path="/editcategories/:id" element={<AddCategories />} />
           <Route path="/addAdmin" element={<AddAdmin />} />
