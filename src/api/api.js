@@ -49,6 +49,11 @@ export const insertAdmin = (data) =>{
     return axios.post(`/admin/`, data)
 }
 
+export const checkAdminCredentials = (data) =>{
+    console.log("CHeck admin>>>>>>>>>>>.", data);
+    return axios.post(`/admin/check-admin/`, data)
+}
+
 export const getOrders = () =>{
     return axios.get(`/order/`)
 }

@@ -35,18 +35,18 @@ import groupArray from "group-array";
 
 const tableHeader = { fontWeight: "bold", fontSize: "20px" };
 
-const tableCell = { fontSize: "20px" }
+const tableCell = { fontSize: "20px" };
 
 function Row(props) {
   const { row, handleOrder, handleReject } = props;
   const [open, setOpen] = React.useState(false);
-
+  let date = new Date(row[0].timeStamp);
   console.log("Ckeck row>>>>>", row);
 
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell sx={ tableCell } >
+        <TableCell sx={tableCell}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -55,9 +55,13 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell sx={ tableCell } align="left">{row[0].id}</TableCell>
-        <TableCell sx={ tableCell } align="left">{row[0].userId.mobNo}</TableCell>
-        <TableCell sx={ tableCell } align="left">
+        <TableCell sx={tableCell} align="left">
+          {row[0].id}
+        </TableCell>
+        <TableCell sx={tableCell} align="left">
+          {row[0].userId.name ? row[0].userId.name : row[0].userId.mobNo}
+        </TableCell>
+        <TableCell sx={tableCell} align="left">
           {row[0].status === 1
             ? "Pay At Resturant"
             : row[0].status === 2
@@ -70,13 +74,19 @@ function Row(props) {
             ? "In Kitchen"
             : "Ready to deliver"}
         </TableCell>
-        <TableCell sx={ tableCell } align="left">{row[0].timeStamp}</TableCell>
-        <TableCell sx={ tableCell } align="left">
+        <TableCell sx={tableCell} align="left">
+          {date.toLocaleDateString()}
+        </TableCell>
+        <TableCell sx={tableCell} align="left">
+          {date.toLocaleTimeString()}
+        </TableCell>
+        <TableCell sx={tableCell} align="left">
           {
             <Button
               variant="contained"
               onClick={() => handleOrder(row)}
-              sx={{ ...tableCell,
+              sx={{
+                ...tableCell,
                 bgcolor:
                   row[0].status === 1 || row[0].status === 2
                     ? "#009933"
@@ -139,19 +149,34 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ ...tableCell, fontWeight: "bold" }} align="left">
+                    <TableCell
+                      sx={{ ...tableCell, fontWeight: "bold" }}
+                      align="left"
+                    >
                       Order Name
                     </TableCell>
-                    <TableCell sx={{ ...tableCell, fontWeight: "bold" }} align="left">
+                    <TableCell
+                      sx={{ ...tableCell, fontWeight: "bold" }}
+                      align="left"
+                    >
                       Menu Item Id
                     </TableCell>
-                    <TableCell sx={{ ...tableCell, fontWeight: "bold" }} align="left">
+                    <TableCell
+                      sx={{ ...tableCell, fontWeight: "bold" }}
+                      align="left"
+                    >
                       Amount
                     </TableCell>
-                    <TableCell sx={{ ...tableCell, fontWeight: "bold" }} align="left">
+                    <TableCell
+                      sx={{ ...tableCell, fontWeight: "bold" }}
+                      align="left"
+                    >
                       Portion
                     </TableCell>
-                    <TableCell sx={{ ...tableCell, fontWeight: "bold" }} align="left">
+                    <TableCell
+                      sx={{ ...tableCell, fontWeight: "bold" }}
+                      align="left"
+                    >
                       Quantity
                     </TableCell>
                   </TableRow>
@@ -159,12 +184,16 @@ function Row(props) {
                 <TableBody>
                   {row.map((order) => (
                     <TableRow>
-                      <TableCell sx={ tableCell } align="left">{order.productId.name}</TableCell>
-                      <TableCell sx={ tableCell } align="left">{order.productId.id}</TableCell>
-                      <TableCell sx={ tableCell } align="left">
+                      <TableCell sx={tableCell} align="left">
+                        {order.productId.name}
+                      </TableCell>
+                      <TableCell sx={tableCell} align="left">
+                        {order.productId.id}
+                      </TableCell>
+                      <TableCell sx={tableCell} align="left">
                         {order.totalProductPrice}
                       </TableCell>
-                      <TableCell sx={ tableCell } align="left">
+                      <TableCell sx={tableCell} align="left">
                         {order.productFull
                           ? "Full"
                           : order.productHalf
@@ -173,7 +202,9 @@ function Row(props) {
                           ? "Quater"
                           : "-"}
                       </TableCell>
-                      <TableCell sx={ tableCell } align="left">{order.qty}</TableCell>
+                      <TableCell sx={tableCell} align="left">
+                        {order.qty}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -210,14 +241,14 @@ function Dashboard() {
   const fetchOrderByStatus = () => {
     getOrderByStatus().then((res) => {
       console.log("XChwhjnh>>>>>>>>", res.data);
-      let data = groupArray(res.data, "id")
+      let data = groupArray(res.data, "id");
       setOrders(data);
     });
   };
 
   const handleOrder = (orders) => {
     console.log("Handle order:>>>>>>", orders);
-    orders?.map((order)=>{
+    orders?.map((order) => {
       if (order.status === 1) {
         order.status = order.status + 1;
       }
@@ -230,7 +261,7 @@ function Dashboard() {
           fetchOrderByStatus();
         }
       });
-    })
+    });
   };
 
   const handleReject = (order) => {
@@ -250,7 +281,7 @@ function Dashboard() {
     fetchOrderByStatus();
     // addOrders();
   }, []);
-  
+
   console.log("Orders:-", orders);
 
   return (
@@ -387,6 +418,9 @@ function Dashboard() {
                   </TableCell>
                   <TableCell align="left" sx={tableHeader}>
                     Status
+                  </TableCell>
+                  <TableCell align="left" sx={tableHeader}>
+                    Date
                   </TableCell>
                   <TableCell align="left" sx={tableHeader}>
                     Time

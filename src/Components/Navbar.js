@@ -36,6 +36,7 @@ import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import CategoryIcon from '@mui/icons-material/Category';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "./store/reducer/userSlice";
 import { logout } from "./store/reducer/userSlice";
@@ -45,6 +46,8 @@ import Categories from './Categories';
 import AddCategories from './AddCategories'
 import Dashboard from "./Dashboard";
 import AddAdmin from "./AddAdmin";
+import OfferForm from "./OfferForm"
+import Admin from './Admin'
 
 const drawerWidth = 240;
 const settings = ["Hi, ", "Profile", "Account", "Dashboard", "Logout"];
@@ -138,11 +141,9 @@ export default function Navbar() {
   };
 
   const handleNotificationClick = (event) => {
-    //console.log("AAAAA:- ", event.currentTarget);
     setNotify(event.currentTarget);
   };
   const handleClick = (event) => {
-    //console.log("AAAAA:- ", event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -166,10 +167,11 @@ export default function Navbar() {
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(logout());
-    document.cookie =
-      "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
-      "password=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
-      `loggedIn=${false}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;`;
+    window.localStorage.removeItem('user');
+    // document.cookie =
+    //   "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
+    //   "password=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
+    //   `loggedIn=${false}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;`;
   };
 
   const handleIcon = ()=>{
@@ -178,6 +180,7 @@ export default function Navbar() {
 
   const drawerList = [
     // { name: "Dashboard", icon: <DashboardIcon /> },
+    { name: "Admin", icon: <AccountCircleIcon /> },
     { name: "OrderedItem", icon: <ShoppingCartIcon /> },
     { name: "Menu", icon: <RestaurantMenuIcon /> },
     { name: "Stocks", icon: <AutoGraphIcon /> },
@@ -190,7 +193,7 @@ export default function Navbar() {
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <Grid container spacing={0}>
-            <Grid item xs={0.5}>
+            <Grid item xs={0.5} md={0.5}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -205,8 +208,8 @@ export default function Navbar() {
               </IconButton>
             </Grid>
 
-            <Grid item xs={10.5} md={10}>
-              <Typography onClick={handleIcon} variant="h6" noWrap component="div">
+            <Grid item xs={10.5} md={10.5}>
+              <Typography sx={{ mt: 0.5 }} onClick={handleIcon} variant="h6" noWrap component="div">
                 RMS
               </Typography>
             </Grid>
@@ -230,20 +233,20 @@ export default function Navbar() {
                   horizontal: "left",
                 }}
               >
-                <Box m="2" p="3" sx={{ bgcolor: "##F1F1F0" }}>
+                <Box m="2" p="1" sx={{ bgcolor: "##F1F1F0" }}>
                   {notification.map((element) => {
                     return (
                       <Box>
                         <Stack direction="row" alignItems="center" gap={1}>
                           {/* <Tooltip title="Open settings"> */}
-                          <IconButton sx={{ p: 0, m: 2 }}>
+                          <IconButton sx={{ p: 0, m: 1}}>
                             <Avatar
                               alt="Remy Sharp"
                               src="/static/images/avatar/2.jpg"
                             />
                           </IconButton>
                           {/* </Tooltip> */}
-                          <Typography sx={{ p: 2, color: "#6A7189" }}>
+                          <Typography sx={{ p: 1, color: "#6A7189" }}>
                             {element}
                           </Typography>
                           <Divider />
@@ -360,6 +363,7 @@ export default function Navbar() {
         <DrawerHeader />
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />
           <Route path="/Stocks" element={<Stocks />} />
@@ -369,6 +373,8 @@ export default function Navbar() {
           <Route path="/addcategories" element={<AddCategories />} />
           <Route path="/editcategories/:id" element={<AddCategories />} />
           <Route path="/addAdmin" element={<AddAdmin />} />
+          <Route path="/offers" element={<OfferForm />} />
+          <Route path="/signUp" element={<Admin />} />
         </Routes>
       </Box>
     </Box>
