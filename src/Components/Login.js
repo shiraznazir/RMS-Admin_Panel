@@ -77,8 +77,9 @@ function Login() {
       setError({ username: "", password: "Password is mandatory" });
     } else {
       checkAdminCredentials({ username: username, password: password }).then((res)=>{
+        console.log("check res", res.data);
         if(res.data.status){
-          setError({ username: "", password: "", submit: "Invalid username and password" });
+          // setError({ username: "", password: "", submit: "Invalid username and password" });
           dispatch(
             login({
               username: username,

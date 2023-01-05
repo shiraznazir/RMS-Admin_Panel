@@ -39,12 +39,12 @@ function Menu() {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
-    setOpen(true)
+    setOpen(true);
     navigate("/menu");
   };
-  
+
   const handleClose = () => {
-    setOpen(false)
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -84,13 +84,16 @@ function Menu() {
           </Typography>
         </Grid>
         <Grid item mt={3} xs={12} md={4} lg={3}>
-          <Link to="/addmenu">
+          <Link
+            to="/addmenu"
+            style={{ textDecoration: 'none' }}
+          >
             <Button
               variant="outlined"
-              sx={{ textDecoration: "none", bgcolor: "#dde0ef" }}
+              sx={{ bgcolor: "#dde0ef" }}
             >
               <ControlPointIcon sx={{ marginRight: "10px" }} />
-              Add Menu Items
+                Add Menu Items
               <KeyboardArrowDownIcon />
             </Button>
           </Link>
@@ -136,9 +139,15 @@ function Menu() {
                   </TableCell>
                   <TableCell align="centre">{item.name}</TableCell>
                   <TableCell align="centre">{item.isVeg}</TableCell>
-                  <TableCell align="centre">{item.price ? item.price : item.fullPrice}</TableCell>
-                  <TableCell align="centre">{item.halfPrice ? item.halfPrice : "-" }</TableCell>
-                  <TableCell align="centre">{item.quaterPrice ? item.quaterPrice : "-"}</TableCell>
+                  <TableCell align="centre">
+                    {item.price ? item.price : item.fullPrice}
+                  </TableCell>
+                  <TableCell align="centre">
+                    {item.halfPrice ? item.halfPrice : "-"}
+                  </TableCell>
+                  <TableCell align="centre">
+                    {item.quaterPrice ? item.quaterPrice : "-"}
+                  </TableCell>
                   <TableCell align="centre">
                     <Link to={`/edit/${item._id}`}>
                       <EditIcon fontSize="large" />
@@ -169,13 +178,15 @@ function Menu() {
                           <Button
                             onClick={() => {
                               handleDelete(item._id);
-                              handleClose()
+                              handleClose();
                             }}
                             variant="contained"
                           >
                             Yes
                           </Button>
-                          <Button onClick={handleClose} variant="contained">No</Button>
+                          <Button onClick={handleClose} variant="contained">
+                            No
+                          </Button>
                         </Stack>
                       </Box>
                     </Modal>

@@ -29,25 +29,26 @@ import Stocks from "./Stocks";
 import { useState } from "react";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
-import ComputerIcon from '@mui/icons-material/Computer';
+import ComputerIcon from "@mui/icons-material/Computer";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
-import CategoryIcon from '@mui/icons-material/Category';
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CategoryIcon from "@mui/icons-material/Category";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "./store/reducer/userSlice";
 import { logout } from "./store/reducer/userSlice";
 import { useNavigate } from "react-router-dom";
 import AddMenu from "./AddMenu";
-import Categories from './Categories';
-import AddCategories from './AddCategories'
+import Categories from "./Categories";
+import AddCategories from "./AddCategories";
 import Dashboard from "./Dashboard";
 import AddAdmin from "./AddAdmin";
-import OfferForm from "./OfferForm"
-import Admin from './Admin'
+import OfferForm from "./OfferForm";
+import Admin from "./Admin";
+import SuperAdmin from "./SuperAdmin";
 
 const drawerWidth = 240;
 const settings = ["Hi, ", "Profile", "Account", "Dashboard", "Logout"];
@@ -125,7 +126,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Navbar() {
-
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
@@ -167,16 +167,16 @@ export default function Navbar() {
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(logout());
-    window.localStorage.removeItem('user');
+    window.localStorage.removeItem("user");
     // document.cookie =
     //   "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
     //   "password=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
     //   `loggedIn=${false}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;`;
   };
 
-  const handleIcon = ()=>{
-    navigate('/')
-  }
+  const handleIcon = () => {
+    navigate("/");
+  };
 
   const drawerList = [
     // { name: "Dashboard", icon: <DashboardIcon /> },
@@ -184,7 +184,7 @@ export default function Navbar() {
     { name: "OrderedItem", icon: <ShoppingCartIcon /> },
     { name: "Menu", icon: <RestaurantMenuIcon /> },
     { name: "Stocks", icon: <AutoGraphIcon /> },
-    { name: "Category", icon: <CategoryIcon />}
+    { name: "Category", icon: <CategoryIcon /> },
   ];
   // console.log("NAvbar>>>>>>>>>>",anchorEl);
   return (
@@ -209,11 +209,17 @@ export default function Navbar() {
             </Grid>
 
             <Grid item xs={10.5} md={10.5}>
-              <Typography sx={{ mt: 0.5 }} onClick={handleIcon} variant="h6" noWrap component="div">
+              <Typography
+                sx={{ mt: 0.5, textDecoration: "none" }}
+                onClick={handleIcon}
+                variant="h6"
+                noWrap
+                component="div"
+              >
                 RMS
               </Typography>
             </Grid>
-            <Grid align='right' justifyContent='center' item xs={0.5} md={0.5}>
+            <Grid align="right" justifyContent="center" item xs={0.5} md={0.5}>
               <Box
                 aria-describedby={id}
                 variant="contained"
@@ -239,7 +245,7 @@ export default function Navbar() {
                       <Box>
                         <Stack direction="row" alignItems="center" gap={1}>
                           {/* <Tooltip title="Open settings"> */}
-                          <IconButton sx={{ p: 0, m: 1}}>
+                          <IconButton sx={{ p: 0, m: 1 }}>
                             <Avatar
                               alt="Remy Sharp"
                               src="/static/images/avatar/2.jpg"
@@ -257,7 +263,7 @@ export default function Navbar() {
                 </Box>
               </Popover>
             </Grid>
-            <Grid align='right' item xs={0.5} md={0.5}>
+            <Grid align="right" item xs={0.5} md={0.5}>
               <div>
                 <Box
                   aria-describedby={id}
@@ -283,10 +289,12 @@ export default function Navbar() {
                     horizontal: "left",
                   }}
                 >
-                  <Grid container direction="column" >
+                  <Grid container direction="column">
                     {settings.map((setting) => {
                       return setting === "Hi, " ? (
-                        <Typography sx={{ p: 2, width: "200px", textAlign: 'center' }}>
+                        <Typography
+                          sx={{ p: 2, width: "200px", textAlign: "center" }}
+                        >
                           {setting + user.username}
                         </Typography>
                       ) : setting === "Logout" ? (
@@ -297,9 +305,7 @@ export default function Navbar() {
                           {setting}
                         </Button>
                       ) : (
-                        <Button sx={{ p: 2, width: "200px" }}>
-                          {setting}
-                        </Button>
+                        <Button sx={{ p: 2, width: "200px" }}>{setting}</Button>
                       );
                     })}
                   </Grid>
@@ -351,7 +357,7 @@ export default function Navbar() {
                   </ListItemIcon>
                   <ListItemText
                     primary={text.name}
-                    sx={{ opacity: open ? 1 : 0, color: '#3385ff' }}
+                    sx={{ opacity: open ? 1 : 0, color: "#3385ff" }}
                   />
                 </ListItemButton>
               </Link>
@@ -375,6 +381,7 @@ export default function Navbar() {
           <Route path="/addAdmin" element={<AddAdmin />} />
           <Route path="/offers" element={<OfferForm />} />
           <Route path="/signUp" element={<Admin />} />
+          <Route path="/superAdmin" element={<SuperAdmin />} />
         </Routes>
       </Box>
     </Box>

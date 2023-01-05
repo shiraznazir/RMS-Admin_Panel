@@ -95,14 +95,13 @@ function AddMenu() {
   };
 
   const createData = () => {
-
     let id = generateRandomNoID();
 
-    const checkId = menuItems.filter((item) => item.id === id)
-    
-      if(checkId.length){
-        createData()
-      }
+    const checkId = menuItems.filter((item) => item.id === id);
+
+    if (checkId.length) {
+      createData();
+    }
 
     console.log("ffsf:", id);
 
@@ -127,8 +126,9 @@ function AddMenu() {
     let valid = validate();
     if (valid) {
       const formData = createData();
+      console.log("Check item data>>>>>>>", formData);
       insertMenuItem(formData).then((res) => {
-        console.log("add", res);
+        // console.log("add", res);
         setMessage(res.data.message);
         //console.log("res>>>>>>>>>>>>" , res.data.status);
         if (res.data.status) {
@@ -217,7 +217,7 @@ function AddMenu() {
 
   const handleCancel = () => navigate("/Menu");
 
-  console.log("Menu Items 1212121 ", menuItems);
+  // console.log("Menu Items 1212121 ", menuItems);
 
   return (
     <Box component="form" enctype="multipart/form-data">
@@ -259,8 +259,8 @@ function AddMenu() {
                   id="outlined-adornment-amount"
                   value={name}
                   onChange={(e) => {
-                    console.log("Check type " , typeof(e.target.value));
-                    if (e.target.value.length < 30 ) {
+                    console.log("Check type ", typeof e.target.value);
+                    if (e.target.value.length < 30) {
                       setName(e.target.value);
                     }
                   }}

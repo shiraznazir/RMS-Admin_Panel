@@ -10,13 +10,17 @@ function App() {
 
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  console.log("User1 " , user);
+  // console.log("User1 " , user);
 
   useEffect(() => {
-    const browerData = document.cookie
+    var user = JSON.parse(localStorage.getItem("user"));
     dispatch(
-      login(browerData)
+      login(user)
     )
+    // const browerData = document.cookie
+    // dispatch(
+    //   login(browerData)
+    // )
     window.process = {
       ...window.process,
     };

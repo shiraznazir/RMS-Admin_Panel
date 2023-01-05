@@ -46,11 +46,12 @@ export const editCategorie = (id, data) =>{
 }
 
 export const insertAdmin = (data) =>{
+    console.log("insert Admin>>", data);
     return axios.post(`/admin/`, data)
 }
 
 export const checkAdminCredentials = (data) =>{
-    console.log("CHeck admin>>>>>>>>>>>.", data);
+    // console.log("CHeck admin>>>>>>>>>>>.", data);
     return axios.post(`/admin/check-admin/`, data)
 }
 

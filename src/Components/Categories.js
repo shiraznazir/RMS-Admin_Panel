@@ -57,10 +57,10 @@ function Categories() {
           </Typography>
         </Grid>
         <Grid item mt={3} xs={12} md={4} lg={3}>
-          <Link to="/addcategories" sx={{ textDecoration: "none" }}>
+          <Link to="/addcategories" style={{ textDecoration: 'none' }}>
             <Button variant="outlined" sx={{ bgcolor: "#dde0ef" }}>
               <ControlPointIcon sx={{ marginRight: "10px" }} />
-              Add Categories
+                Add Categories
               <KeyboardArrowDownIcon />
             </Button>
           </Link>

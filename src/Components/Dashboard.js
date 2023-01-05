@@ -35,7 +35,7 @@ import groupArray from "group-array";
 
 const tableHeader = { fontWeight: "bold", fontSize: "20px" };
 
-const tableCell = { fontSize: "20px" };
+const tableCell = { fontSize: "12px" };
 
 function Row(props) {
   const { row, handleOrder, handleReject } = props;
@@ -113,7 +113,9 @@ function Row(props) {
                 ? "Accept"
                 : row[0].status === 3
                 ? "Add for Kitchen"
-                : "Ready To Deliver"}{" "}
+                : row[0].status === 4
+                ? "Ready To Deliver"
+                : "Delivered"}{" "}
               <CheckCircleOutlineIcon sx={{ ml: 1 }} />
             </Button>
           }
