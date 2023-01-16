@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Typography, Box, Grid, Button, Modal } from "@mui/material";
+import { Typography, Box, Grid, Button, Popover } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Table from "@mui/material/Table";
@@ -10,32 +10,54 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { getCategories, deleteCategorie } from "../api/api";
+import { getCateByResturant, deleteCategory } from "../api/api";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "./store/reducer/userSlice";
+import Dialog from "@mui/material/Dialog/Dialog";
 
 function Categories() {
+  const navigate = useNavigate();
+  const user = useSelector(selectUser);
   const [categories, setCategories] = useState([]);
-  const naviagate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [categoryId, setCategory] = useState("");
 
-  useEffect(() => {
-    getCategories()
-      .then((val) => {
-        setCategories(val.data);
+  const fetchCategories = () =>{
+    getCateByResturant({ id: user.id })
+      .then((res) => {
+        if (res.data.status) {
+          setCategories(res.data.categories);
+        }
       })
       .catch((err) => {
         console.log("Error ", err);
       });
-  }, []);
-
-  const handleDelete = (e, id) => {
-    e.preventDefault();
-    deleteCategorie(id);
-    naviagate("/categories");
+  }
+  const handleOpen = (id) => {
+    setCategory(id);
+    setOpen(true);
   };
 
-  console.log("000000000", categories);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    fetchCategories()
+  }, []);
+
+  const handleDelete = () => {
+    deleteCategory(categoryId).then((res) => {
+      if (res.data.status) {
+        setOpen(false);
+        fetchCategories();
+        navigate("/category");
+      }
+    });
+  };
 
   return (
     <Box
@@ -57,10 +79,10 @@ function Categories() {
           </Typography>
         </Grid>
         <Grid item mt={3} xs={12} md={4} lg={3}>
-          <Link to="/addcategories" style={{ textDecoration: 'none' }}>
+          <Link to="/addcategories" style={{ textDecoration: "none" }}>
             <Button variant="outlined" sx={{ bgcolor: "#dde0ef" }}>
               <ControlPointIcon sx={{ marginRight: "10px" }} />
-                Add Categories
+              Add Categories
               <KeyboardArrowDownIcon />
             </Button>
           </Link>
@@ -83,12 +105,12 @@ function Categories() {
                 >
                   Title
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   sx={{ fontWeight: "bold", fontSize: "20px" }}
                   align="centre"
                 >
                   Status
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   sx={{ fontWeight: "bold", fontSize: "20px" }}
                   align="centre"
@@ -109,7 +131,7 @@ function Categories() {
                     {category.id}
                   </TableCell>
                   <TableCell align="centre">{category.title}</TableCell>
-                  <TableCell align="centre">{category.status}</TableCell>
+                  {/* <TableCell align="centre">{category.status}</TableCell> */}
                   <TableCell align="centre">
                     <Link
                       to={`/editCategories/${category._id}`}
@@ -117,10 +139,12 @@ function Categories() {
                     >
                       <EditIcon sx={{ color: "#000000" }} />
                     </Link>
+                    {/* <Link to={(e) => handleOpen(e, category._id)}> */}
                     <DeleteIcon
-                      onClick={(e) => handleDelete(e, category._id)}
-                      sx={{ color: "#FF0000" }}
+                      onClick={() => handleOpen(category._id)}
+                      sx={{ color: "#FF0000", cursor: 'pointer' }}
                     />
+                    {/* </Link> */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -128,6 +152,32 @@ function Categories() {
           </Table>
         </TableContainer>
       </Box>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+      >
+        <Typography sx={{ p: 2 }}>Are you sure to delete</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={6}>
+            <Button
+              sx={{ m: 2 }}
+              onClick={() => handleDelete()}
+              variant="contained"
+            >
+              Yes
+            </Button>
+          </Grid>
+          <Grid item xs={6} md={6}>
+            <Button sx={{ m: 2 }} onClick={handleClose} variant="contained">
+              No
+            </Button>
+          </Grid>
+        </Grid>
+      </Dialog>
     </Box>
   );
 }

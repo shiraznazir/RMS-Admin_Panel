@@ -9,6 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import { insertAdmin } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   address: {
@@ -28,9 +29,16 @@ const style = {
     width: "40%",
     margin: "5px auto",
   },
+  success: {
+    color: "#006400",
+  },
+  error: {
+    color: "#FF0000",
+  },
 };
 
 function AddAdmin() {
+  const navigate = useNavigate();
   const [resName, setResName] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -39,33 +47,74 @@ function AddAdmin() {
   const [gstNo, setGstNo] = useState("");
   const [fssaiNo, setFssaiNo] = useState("");
   const [address, setAddress] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   const formCredentials = () => {
-    const formdata = new FormData();
+    const formData = new FormData();
 
-    formdata.append("resturantName", resName);
-    formdata.append("name", name);
-    formdata.append("password", password);
-    formdata.append("mobNo", mobNo);
-    formdata.append("email", email);
-    formdata.append("gstNo", gstNo);
-    formdata.append("fssaiNo", fssaiNo);
-    formdata.append("address", address);
+    formData.append("resturantName", resName);
+    formData.append("name", name);
+    formData.append("password", password);
+    formData.append("mobNo", mobNo);
+    formData.append("email", email);
+    formData.append("gstNo", gstNo);
+    formData.append("fssaiNo", fssaiNo);
+    formData.append("address", address);
 
-    return formdata;
+    return formData;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = formCredentials();
-    insertAdmin(formData);
+    if (resName === "") {
+      setError("Resturant Name is mandatory");
+    } else if (name === "") {
+      setError("Name is mandatory");
+    } else if (password === "") {
+      setError("Password is mandatory");
+    } else if (mobNo === "") {
+      setError("mobNo is mandatory");
+    } else {
+      const generateRandomNoID = () => {
+        let randomNumber = Math.floor(100000 + Math.random() * 900000);
+        randomNumber = String(randomNumber);
+        randomNumber = randomNumber.substring(0, 4);
+        return "res_" + randomNumber;
+      };
+      const id = generateRandomNoID();
+      let formData = {
+        id: id,
+        resturantName: resName,
+        role: 2,
+        name: name,
+        password: password,
+        mobNo: mobNo,
+        email: email,
+        gstNo: gstNo,
+        fssaiNo: fssaiNo,
+        address: address,
+      };
+      console.log("Adding resturant>>>>>", formData);
+      insertAdmin(formData).then((res) => {
+        if (res.data.status) {
+          setSuccess(res.data.message);
+          setTimeout(() => {
+            navigate("/superAdmin");
+          }, 3000);
+        }
+      });
+    }
+    setTimeout(() => {
+      setError("");
+    }, 3000);
   };
 
   // console.log("Check form Data >>>>>>>>>", mobNo);
 
   return (
     <Grid component="form">
-      <Paper sx={ style.paper }>
+      <Paper sx={style.paper}>
         <Typography
           variant="h5"
           fontWeight="bold"
@@ -82,7 +131,6 @@ function AddAdmin() {
             <OutlinedInput
               type="text"
               size="small"
-              id="outlined-adornment-amount"
               value={resName}
               onChange={(e) => {
                 if (e.target.value.length <= 60) {
@@ -102,7 +150,6 @@ function AddAdmin() {
             <OutlinedInput
               type="text"
               size="small"
-              id="outlined-adornment-amount"
               value={name}
               onChange={(e) => {
                 if (e.target.value.length < 20 && isNaN(e.target.value)) {
@@ -122,10 +169,9 @@ function AddAdmin() {
             <OutlinedInput
               type="password"
               size="small"
-              id="outlined-adornment-amount"
               value={password}
               onChange={(e) => {
-                if (e.target.value.length < 20 && isNaN(e.target.value)) {
+                if (e.target.value.length < 20) {
                   setPassword(e.target.value);
                 }
               }}
@@ -137,30 +183,10 @@ function AddAdmin() {
         <Grid align="center">
           <FormControl sx={{ mb: 2, width: "100%" }}>
             <InputLabel size="small" htmlFor="outlined-adornment-amount">
-              Email
-            </InputLabel>
-            <OutlinedInput
-              type="text"
-              size="small"
-              id="outlined-adornment-amount"
-              label="email"
-              value={email}
-              onChange={(e) => {
-                if (e.target.value.length < 20) {
-                  setEmail(e.target.value);
-                }
-              }}
-            />
-          </FormControl>
-        </Grid>
-        <Grid align="center">
-          <FormControl sx={{ mb: 2, width: "100%" }}>
-            <InputLabel size="small" htmlFor="outlined-adornment-amount">
               Mobile No
             </InputLabel>
             <OutlinedInput
               size="small"
-              id="outlined-adornment-amount"
               label="Mobile No"
               value={mobNo}
               onChange={(e) => {
@@ -174,14 +200,35 @@ function AddAdmin() {
         <Grid align="center">
           <FormControl sx={{ mb: 2, width: "100%" }}>
             <InputLabel size="small" htmlFor="outlined-adornment-amount">
+              Email
+            </InputLabel>
+            <OutlinedInput
+              type="text"
+              size="small"
+              label="email"
+              value={email}
+              onChange={(e) => {
+                if (e.target.value.length < 30) {
+                  setEmail(e.target.value);
+                }
+              }}
+            />
+          </FormControl>
+        </Grid>
+        <Grid align="center">
+          <FormControl sx={{ mb: 2, width: "100%" }}>
+            <InputLabel size="small" htmlFor="outlined-adornment-amount">
               GST No
             </InputLabel>
             <OutlinedInput
-              id="outlined-adornment-amount"
               label="GST No"
               size="small"
               value={gstNo}
-              onChange={(e) => setGstNo(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 15) {
+                  setGstNo(e.target.value);
+                }
+              }}
             />
           </FormControl>
         </Grid>
@@ -191,11 +238,14 @@ function AddAdmin() {
               FSSAI No
             </InputLabel>
             <OutlinedInput
-              id="outlined-adornment-amount"
               label="FSSAI No"
               size="small"
               value={fssaiNo}
-              onChange={(e) => setFssaiNo(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 14) {
+                  setFssaiNo(e.target.value);
+                }
+              }}
             />
           </FormControl>
         </Grid>
@@ -205,7 +255,6 @@ function AddAdmin() {
               Address
             </InputLabel>
             <OutlinedInput
-              id="outlined-adornment-amount"
               label="Address"
               size="small"
               multiline
@@ -216,6 +265,16 @@ function AddAdmin() {
             />
           </FormControl>
         </Grid>
+        {error && (
+          <Typography align="left" sx={style.error}>
+            {error}
+          </Typography>
+        )}
+        {success && (
+          <Typography align="left" sx={style.success}>
+            {success}
+          </Typography>
+        )}
         <Grid align="center">
           <Button
             variant="contained"

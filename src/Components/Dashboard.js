@@ -30,8 +30,16 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { getOrders, getOrderByStatus, editOrder } from "../api/api";
+
+import {
+  getOrders,
+  getOrderByStatus,
+  editOrder,
+  getDeliveredOrders,
+} from "../api/api";
 import groupArray from "group-array";
+import { useSelector } from "react-redux";
+import { selectUser } from "./store/reducer/userSlice";
 
 const tableHeader = { fontWeight: "bold", fontSize: "20px" };
 
@@ -41,8 +49,6 @@ function Row(props) {
   const { row, handleOrder, handleReject } = props;
   const [open, setOpen] = React.useState(false);
   let date = new Date(row[0].timeStamp);
-  console.log("Ckeck row>>>>>", row);
-
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -239,17 +245,41 @@ Row.propTypes = {
 
 function Dashboard() {
   const [orders, setOrders] = useState([]);
+  const [cardData, setCardData] = useState({
+    deliveredOrder: 0,
+    totalSales: 0,
+    rejectOrder: 0,
+  });
+  const user = useSelector(selectUser);
 
   const fetchOrderByStatus = () => {
-    getOrderByStatus().then((res) => {
-      console.log("XChwhjnh>>>>>>>>", res.data);
+    getOrderByStatus(user.id).then((res) => {
+      // console.log("XChwhjnh>>>>>>>>");
       let data = groupArray(res.data, "id");
       setOrders(data);
     });
   };
 
+  const fetchDeliveredOrder = () => {
+    let date = new Date();
+  let previousDate = new Date(new Date().setDate(new Date().getDate() - 1));
+    getDeliveredOrders({ id: user.id, startDate: previousDate, endDate: date })
+      .then((res) => {
+        if (res.data.status) {
+          setCardData({
+            deliveredOrder: res.data.deliveredOrders,
+            totalSales: res.data.totalSales,
+            rejectOrder: res.data.rejectOrder
+          });
+        }
+        // console.log("res ", res.data);
+      })
+      .catch((err) => {
+        console.log("Error ", err);
+      });
+  };
+
   const handleOrder = (orders) => {
-    console.log("Handle order:>>>>>>", orders);
     orders?.map((order) => {
       if (order.status === 1) {
         order.status = order.status + 1;
@@ -269,7 +299,7 @@ function Dashboard() {
   const handleReject = (order) => {
     let update = {
       ...order,
-      status: 10,
+      status: -1,
     };
     editOrder(order._id, update).then((res) => {
       if (res.data.status) {
@@ -281,10 +311,11 @@ function Dashboard() {
   useEffect(() => {
     // fetchOrders();
     fetchOrderByStatus();
+    fetchDeliveredOrder();
     // addOrders();
   }, []);
 
-  console.log("Orders:-", orders);
+  console.log("Data Order:-", cardData);
 
   return (
     <div style={{ backgroundColor: "#f0f1f1", width: "100%" }}>
@@ -325,7 +356,7 @@ function Dashboard() {
                   </Box>
                   <div>
                     <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
-                      56
+                      {Object.keys(orders).length}
                     </Typography>
                     <Typography>PENDING ORDERS</Typography>
                   </div>
@@ -359,7 +390,7 @@ function Dashboard() {
                   </Box>
                   <div>
                     <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
-                      12
+                      {cardData.deliveredOrder}
                     </Typography>
                     <Typography>TOTAL ORDER DELIVERED</Typography>
                   </div>
@@ -389,14 +420,14 @@ function Dashboard() {
                       borderRadius: "50%",
                     }}
                   >
-                    <AccountBalanceWalletIcon
+                    <CurrencyRupeeIcon
                       fontSize="large"
                       sx={{ m: 2.5 }}
                     />
                   </Box>
                   <div>
                     <Typography sx={{ fontSize: 30, fontWeight: "bold" }}>
-                      25
+                      {cardData.totalSales}
                     </Typography>
                     <Typography>TOTAL SALES</Typography>
                   </div>
@@ -498,7 +529,7 @@ function Dashboard() {
                         fontSize: 20,
                       }}
                     >
-                      25
+                      {Object.keys(orders).length}
                     </Box>
                     <Typography sx={{ fontWeight: "bold" }}>
                       New Orders
@@ -527,7 +558,7 @@ function Dashboard() {
                       marginTop={2}
                       sx={{ fontSize: 24, fontWeight: "bold" }}
                     >
-                      25
+                      {Object.keys(orders).length}
                     </Typography>
                     <Typography marginLeft={2} sx={{ color: "#8D8C8C" }}>
                       On Delivery
@@ -547,7 +578,7 @@ function Dashboard() {
                       marginTop={2}
                       sx={{ fontSize: 24, fontWeight: "bold" }}
                     >
-                      60
+                      {cardData.deliveredOrder}
                     </Typography>
                     <Typography marginLeft={2} sx={{ color: "#8D8C8C" }}>
                       Delivered
@@ -567,7 +598,7 @@ function Dashboard() {
                       marginTop={2}
                       sx={{ fontSize: 24, fontWeight: "bold" }}
                     >
-                      5
+                      {cardData.rejectOrder}
                     </Typography>
                     <Typography marginLeft={2} sx={{ color: "#8D8C8C" }}>
                       Canceled

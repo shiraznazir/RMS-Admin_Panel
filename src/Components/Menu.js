@@ -13,7 +13,8 @@ import Paper from "@mui/material/Paper";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 import { Stack } from "@mui/system";
-import { getMenuItems, deleteMenuItem } from "../api/api";
+import { selectUser } from './store/reducer/userSlice';
+import { getMenuItemsByRes, deleteMenuItem } from "../api/api";
 import { setMenuItems } from "./store/reducer/menuItemsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +34,9 @@ const style = {
 const tableHeader = { fontWeight: "bold", fontSize: "15px" };
 
 function Menu() {
+
   const menuItems = useSelector((state) => state.menuItems.menuItems);
+  const user = useSelector(selectUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -48,9 +51,12 @@ function Menu() {
   };
 
   useEffect(() => {
-    getMenuItems()
-      .then((val) => {
-        dispatch(setMenuItems(val.data));
+    getMenuItemsByRes(user.id)
+      .then((res) => {
+        let data = res.data.filter((item)=>{
+            return item.resturantId === user.id
+        })
+        dispatch(setMenuItems(data));
       })
       .catch((err) => {
         console.log("Error ", err);
@@ -62,7 +68,7 @@ function Menu() {
     navigate("/menu");
   };
 
-  console.log("Menu Items:- ", menuItems);
+  console.log("menuItems >> :- ", menuItems);
 
   return (
     <Box

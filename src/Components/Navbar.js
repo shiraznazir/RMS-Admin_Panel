@@ -41,6 +41,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "./store/reducer/userSlice";
 import { logout } from "./store/reducer/userSlice";
 import { useNavigate } from "react-router-dom";
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import AddMenu from "./AddMenu";
 import Categories from "./Categories";
 import AddCategories from "./AddCategories";
@@ -49,9 +50,13 @@ import AddAdmin from "./AddAdmin";
 import OfferForm from "./OfferForm";
 import Admin from "./Admin";
 import SuperAdmin from "./SuperAdmin";
+import NotAccess from "./NotAccess";
+import Sales from "./Sales"
 
 const drawerWidth = 240;
+
 const settings = ["Hi, ", "Profile", "Account", "Dashboard", "Logout"];
+
 const notification = [
   "Items Added to the Card",
   "Items created successfully",
@@ -128,6 +133,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Navbar() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const user1 = useSelector(selectUser);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [notify, setNotify] = useState(null);
@@ -155,6 +161,18 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
+  const handleSetting = (option) => {
+    
+    if(option === "Profile"){
+      navigate('/Admin')
+    } else if(option === "Account"){
+      navigate('/Sales')
+    } else if(option === "Dashboard"){
+      navigate('/')
+    }
+    setAnchorEl(null);
+  }
+
   const openNotify = Boolean(notify);
   const idNotify = openNotify ? "simple-popover" : undefined;
   const opening = Boolean(anchorEl);
@@ -167,11 +185,7 @@ export default function Navbar() {
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(logout());
-    window.localStorage.removeItem("user");
-    // document.cookie =
-    //   "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
-    //   "password=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;";
-    //   `loggedIn=${false}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/login;`;
+    window.localStorage.removeItem("admin");
   };
 
   const handleIcon = () => {
@@ -180,13 +194,17 @@ export default function Navbar() {
 
   const drawerList = [
     // { name: "Dashboard", icon: <DashboardIcon /> },
-    { name: "Admin", icon: <AccountCircleIcon /> },
+    {
+      name: user1.username === "super_admin" ? "SuperAdmin" : "Admin",
+      icon: <AccountCircleIcon />,
+    },
+    {name: "Sales", icon: <PointOfSaleIcon />},
     { name: "OrderedItem", icon: <ShoppingCartIcon /> },
     { name: "Menu", icon: <RestaurantMenuIcon /> },
     { name: "Stocks", icon: <AutoGraphIcon /> },
     { name: "Category", icon: <CategoryIcon /> },
   ];
-  // console.log("NAvbar>>>>>>>>>>",anchorEl);
+  // console.log("Navbar user >>>>>>>>>>", user1);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -209,15 +227,16 @@ export default function Navbar() {
             </Grid>
 
             <Grid item xs={10.5} md={10.5}>
-              <Typography
-                sx={{ mt: 0.5, textDecoration: "none" }}
-                onClick={handleIcon}
-                variant="h6"
-                noWrap
-                component="div"
-              >
-                RMS
-              </Typography>
+              <Link to="/" style={{ textDecoration: "none", color: "#ffffff" }}>
+                <Typography
+                  sx={{ mt: 0.5 }}
+                  variant="h6"
+                  noWrap
+                  component="div"
+                >
+                  RMS
+                </Typography>
+              </Link>
             </Grid>
             <Grid align="right" justifyContent="center" item xs={0.5} md={0.5}>
               <Box
@@ -293,19 +312,19 @@ export default function Navbar() {
                     {settings.map((setting) => {
                       return setting === "Hi, " ? (
                         <Typography
-                          sx={{ p: 2, width: "200px", textAlign: "center" }}
+                          sx={{ p: 2, width: "200px", textAlign: "center", color: '#000000' }}
                         >
                           {setting + user.username}
                         </Typography>
                       ) : setting === "Logout" ? (
                         <Button
-                          sx={{ p: 2, width: "200px" }}
+                          sx={{ p: 2, width: "200px", color: '#000000' }}
                           onClick={(e) => handleLogout(e)}
                         >
                           {setting}
                         </Button>
                       ) : (
-                        <Button sx={{ p: 2, width: "200px" }}>{setting}</Button>
+                        <Button onClick={()=>handleSetting(setting)} sx={{ p: 2, width: "200px", color: '#000000' }}>{setting}</Button>
                       );
                     })}
                   </Grid>
@@ -369,7 +388,12 @@ export default function Navbar() {
         <DrawerHeader />
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/admin"
+            element={
+              user1.username !== "super_admin" ? <Admin /> : <NotAccess />
+            }
+          />
           <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />
           <Route path="/Stocks" element={<Stocks />} />
@@ -380,8 +404,14 @@ export default function Navbar() {
           <Route path="/editcategories/:id" element={<AddCategories />} />
           <Route path="/addAdmin" element={<AddAdmin />} />
           <Route path="/offers" element={<OfferForm />} />
-          <Route path="/signUp" element={<Admin />} />
-          <Route path="/superAdmin" element={<SuperAdmin />} />
+          <Route path="/sales" element={<Sales />} />
+          {/* <Route path="/signUp" element={<Admin />} /> */}
+          <Route
+            path="/superAdmin"
+            element={
+              user1.username == "super_admin" ? <SuperAdmin /> : <NotAccess />
+            }
+          />
         </Routes>
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -9,7 +9,13 @@ import {
   Typography,
   TextField,
   Button,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
 } from "@mui/material";
+import { getAdminByUser, updateAdmin } from "../api/api";
+import { selectUser } from "./store/reducer/userSlice";
+import { useSelector } from "react-redux";
 
 const style = {
   address: {
@@ -33,24 +39,34 @@ const style = {
     borderRadius: "50px 50px 0 0",
     fontSize: "25px",
   },
-  headerText: { fontWeight: "bold", ml: "100px", mt: 1 },
+  headerText: {
+    fontWeight: "bold",
+    ml: "100px",
+    mt: 1,
+  },
+  success: {
+    mt: 1,
+    color: "#006400",
+  },
 };
 
 function Admin() {
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
+  const [id, setId] = useState(null);
   const [resName, setResName] = useState("");
   const [name, setName] = useState("");
   const [mobNo, setMobNo] = useState();
   const [email, setEmail] = useState("");
-  const [gstNo, setGstNo] = useState();
-  const [fssaiNo, setFssaiNo] = useState();
-  const [address, setAddress] = useState();
+  const [gstNo, setGstNo] = useState("");
+  const [fssaiNo, setFssaiNo] = useState("");
+  const [address, setAddress] = useState("");
+  const [success, setSuccess] = useState("");
 
   const createFormData = () => {
-
     const formData = new FormData();
     formData.append("resturantName", resName);
-    formData.append("adminName", name);
+    formData.append("username", name);
     formData.append("mobNo", mobNo);
     formData.append("email", email);
     formData.append("gstNo", gstNo);
@@ -61,13 +77,55 @@ function Admin() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const formData = createFormData();
+    e.preventDefault();
+    const formData = {
+      resturantName: resName,
+      username: name,
+      mobNo: mobNo,
+      email: email,
+      gstNo: gstNo,
+      fssaiNo: fssaiNo,
+      address: address,
+    };
+    updateAdmin(id, formData)
+      .then((res) => {
+        if (res.data.status) {
+          setSuccess(res.data.msg);
+          setTimeout(() => {
+            setSuccess("");
+            fetchApi();
+          }, 3000);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   const handleCancel = () => {
     navigate("/");
   };
+
+  const fetchApi = () => {
+    getAdminByUser(user.username).then((res) => {
+      if (res.data.status) {
+        setId(res.data.admin[0]._id);
+        setResName(res.data.admin[0].resturantName);
+        setName(res.data.admin[0].username);
+        setMobNo(res.data.admin[0].mobNo);
+        setEmail(res.data.admin[0].email);
+        setGstNo(res.data.admin[0].gstNo);
+        setFssaiNo(res.data.admin[0].fssaiNo);
+        setAddress(res.data.admin[0].address);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
+  console.log("User >>> ", user.username);
 
   return (
     <Box>
@@ -78,6 +136,11 @@ function Admin() {
         sx={{ padding: 4, width: 100, height: 100 }}
       /> */}
       </Box>
+      {success && (
+        <Typography variant="h6" align="center" sx={style.success}>
+          {success}
+        </Typography>
+      )}
       <Grid sx={{ mt: 4 }} container spacing={2}>
         <Grid item xs={6} md={8}>
           <Typography variant="h4" sx={style.headerText}>
@@ -249,7 +312,7 @@ function Admin() {
           <Typography sx={{ ml: "100px", mt: 1 }}>Address</Typography>
         </Grid>
         <Grid item xs={6} md={6}>
-          <textarea
+          {/* <textarea
             type="address"
             value={address}
             placeholder="Address"
@@ -261,21 +324,26 @@ function Admin() {
             rows="3"
             cols="50"
             style={style.address}
-          />
-          {/* <TextField
-            inputProps={{
-              style: {
-                height: "0px",
-              },
-            }}
-            sx={{ mb: 2 }}
-            id="outlined-basic"
-            type='address'
-            variant="outlined"
-            fullWidth
-            multiline
-            rows={3}
           /> */}
+          <FormControl sx={{ mb: 2, width: "100%" }}>
+            <InputLabel size="small" htmlFor="outlined-adornment-amount">
+              Address
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-amount"
+              label="Address"
+              size="small"
+              multiline
+              rows="3"
+              cols="50"
+              value={address}
+              onChange={(e) => {
+                if (e.target.value.length < 100) {
+                  setAddress(e.target.value);
+                }
+              }}
+            />
+          </FormControl>
         </Grid>
       </Grid>
       {/* <Card elevation={2} sx={{ p: 2, width: "50%" }}>

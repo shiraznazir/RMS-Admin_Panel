@@ -10,10 +10,11 @@ function App() {
 
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  // console.log("User1 " , user);
+  console.log("User1 " , user);
 
   useEffect(() => {
-    var user = JSON.parse(localStorage.getItem("user"));
+    var user = JSON.parse(localStorage.getItem("admin"));
+    console.log("User check>>", user)
     dispatch(
       login(user)
     )

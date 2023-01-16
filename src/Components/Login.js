@@ -49,12 +49,7 @@ const formStyle = {
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState({
-    username: "",
-    password: "",
-    submit: "",
-
-  });
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -72,33 +67,34 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username === "") {
-      setError({ ...error, username: "Username is mandatory" });
+      setError("Please enter username");
     } else if (password === "") {
-      setError({ username: "", password: "Password is mandatory" });
+      setError("Please enter password");
     } else {
-      checkAdminCredentials({ username: username, password: password }).then((res)=>{
-        console.log("check res", res.data);
-        if(res.data.status){
-          // setError({ username: "", password: "", submit: "Invalid username and password" });
-          dispatch(
-            login({
-              username: username,
-              password: password,
-              loggedIn: true,
-            })
-          );
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ username: username, loggedIn: true })
-          );
-          // document.cookie = `username=${username}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
-          // document.cookie = `password=${password}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
-          // document.cookie = `loggedIn=${true}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
-          navigate("/");
-        }else{
-          setError({ username: "", password: "", submit: "Invalid username and password" });
+      checkAdminCredentials({ username: username, password: password }).then(
+        (res) => {
+          if (res.data.status) {
+            dispatch(
+              login({
+                username: username,
+                id: res.data.id,
+                loggedIn: true,
+              })
+            );
+            localStorage.setItem(
+              "admin",
+              JSON.stringify({
+                username: username,
+                id: res.data.id,
+                loggedIn: true,
+              })
+            );
+            navigate("/");
+          } else {
+            setError(res.data.msg);
+          }
         }
-      });
+      );
     }
   };
 
@@ -116,30 +112,29 @@ function Login() {
         <TextField
           label="Username"
           placeholder="Enter Username"
+          value={username}
           onChange={(e) => {
-            if(e.target.value.length < 10){
-              setUsername(e.target.value)
+            if (e.target.value.length < 20) {
+              setUsername(e.target.value);
             }
           }}
           fullWidth
           required
         />
-        {error.username && <Typography sx={{ color: "#FF0000" }}>{error.username}</Typography>}
         <TextField
           sx={{ margin: "15px 0" }}
           label="Password"
           placeholder="Enter Password"
           onChange={(e) => {
-            if(e.target.value.length < 10){
-              setPassword(e.target.value)
+            if (e.target.value.length < 10) {
+              setPassword(e.target.value);
             }
           }}
           type="password"
           fullWidth
           required
         />
-        {error.password && <Typography sx={{ color: "#FF0000" }}>{error.password}</Typography>}
-        {error.submit && <Typography sx={{ color: "#FF0000" }}>{error.submit}</Typography>}
+        {error && <Typography sx={{ color: "#FF0000" }}>{error}</Typography>}
         <FormControlLabel
           control={<Checkbox name="checkedB" color="primary" />}
           label="Remember me"

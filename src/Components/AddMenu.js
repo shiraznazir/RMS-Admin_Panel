@@ -21,13 +21,15 @@ import FormLabel from "@mui/material/FormLabel";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import {
   insertMenuItem,
-  getCategories,
+  getCateByResturant,
   getMenuItems,
   getMenuItemsById,
   editMenuItem,
 } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "./store/reducer/userSlice";
 
 const paperStyle = {
   padding: 40,
@@ -38,6 +40,7 @@ const paperStyle = {
 
 function AddMenu() {
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
   const { id } = useParams();
   const [menuItems, setMenuItems] = useState([]);
   const [name, setName] = useState("");
@@ -71,7 +74,7 @@ function AddMenu() {
       err.push("Name should 3 characters long");
     }
     if (selectCategories.length < 3) {
-      err.push("Name should 3 characters long");
+      err.push("Please select category");
     }
     if (!portion && price <= 0) {
       err.push("Price should be a greated than 0");
@@ -103,10 +106,9 @@ function AddMenu() {
       createData();
     }
 
-    console.log("ffsf:", id);
-
     const formData = new FormData();
     formData.append("id", id);
+    formData.append("resturantId", user.id);
     formData.append("name", name);
     formData.append("category", selectCategories);
     formData.append("portion", portion);
@@ -149,8 +151,8 @@ function AddMenu() {
 
   const fetchMenuItem = () => {
     getMenuItems()
-      .then((val) => {
-        setMenuItems(val.data);
+      .then((res) => {
+        setMenuItems(res.data);
       })
       .catch((err) => {
         console.log("Error ", err);
@@ -159,10 +161,14 @@ function AddMenu() {
 
   const fetchCategories = () => {
     console.log("res categ here");
-    getCategories()
-      .then((response) => {
-        console.log("res categ", response);
-        setCategories(response.data);
+    getCateByResturant({id: user.id})
+      .then((res) => {
+        // console.log("res categ", res.data);
+        let data = res.data.filter((value) => {
+          return value.resturantId === user.id;
+        });
+        console.log("Categories>>>>>>>", data);
+        setCategories(res.data);
       })
       .catch((err) => {
         console.log("Error ", err);
@@ -171,17 +177,17 @@ function AddMenu() {
 
   const fetchMenuItemsById = () => {
     getMenuItemsById(id)
-      .then((val) => {
-        console.log("getMenuItemsById : ", val.data);
-        setMenuItem(val.data);
-        setName(val.data.name);
-        setSelectCategories(val.data.category);
-        setPortion(val.data.portion);
-        setFullPrice(val.data.fullPrice);
-        setHalfPrice(val.data.halfPrice);
-        setQuaterPrice(val.data.quaterPrice);
-        setIsVeg(val.data.isVeg);
-        setFileName(val.data.menuImage);
+      .then((res) => {
+        console.log("getMenuItemsById : ", res.data);
+        setMenuItem(res.data);
+        setName(res.data.name);
+        setSelectCategories(res.data.category);
+        setPortion(res.data.portion);
+        setFullPrice(res.data.fullPrice);
+        setHalfPrice(res.data.halfPrice);
+        setQuaterPrice(res.data.quaterPrice);
+        setIsVeg(res.data.isVeg);
+        setFileName(res.data.menuImage);
         setChecked({
           full: true,
           half: true,
@@ -217,7 +223,7 @@ function AddMenu() {
 
   const handleCancel = () => navigate("/Menu");
 
-  // console.log("Menu Items 1212121 ", menuItems);
+  console.log("Menu Items section user id >>>>>>>>> ", user.id);
 
   return (
     <Box component="form" enctype="multipart/form-data">
@@ -259,7 +265,7 @@ function AddMenu() {
                   id="outlined-adornment-amount"
                   value={name}
                   onChange={(e) => {
-                    console.log("Check type ", typeof e.target.value);
+                    // console.log("Check type ", typeof e.target.value);
                     if (e.target.value.length < 30) {
                       setName(e.target.value);
                     }
