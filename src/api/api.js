@@ -53,7 +53,6 @@ export const editCategory = (id, data) => {
 };
 
 export const insertAdmin = (data) => {
-  console.log("insert Admin>>", data);
   return axios.post(`/admin`, data);
 };
 
@@ -70,7 +69,6 @@ export const updateAdmin = (id, data) => {
 };
 
 export const checkAdminCredentials = (data) => {
-  console.log("CHeck admin>>>>>>>>>>>.", data);
   return axios.post(`/admin/check-admin/`, data);
 };
 
@@ -83,7 +81,6 @@ export const getOrderByStatus = (id) => {
 };
 
 export const editOrder = (id, data) => {
-  //console.log("Edit order >>>>>>>>", id, data);
   return axios.put(`/order/${id}`, data);
 };
 
@@ -94,4 +91,12 @@ export const getDeliveredOrders = (data) => {
 
 export const getOrdersHistory = (data) =>{
   return axios.post(`/history-order`, data) 
+}
+
+export const getPreviousOrders = (data) =>{
+  return axios.post(`/res-history`, data) 
+}
+
+export const getUsers = () =>{
+  return axios.get(`/user`)
 }

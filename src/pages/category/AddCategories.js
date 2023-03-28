@@ -11,10 +11,10 @@ import {
   Paper,
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { insertCategories, getCategory, editCategory } from "../api/api";
+import { insertCategories, getCategory, editCategory } from "../../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "./store/reducer/userSlice";
+import { selectUser } from "../../Components/store/reducer/userSlice";
 
 const paperStyle = {
   padding: 5,

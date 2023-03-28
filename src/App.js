@@ -1,6 +1,6 @@
 import React,{ useEffect } from 'react'
-import Navbar from './Components/Navbar'
-import Login from './Components/Login';
+import Navbar from './pages/app/Navbar'
+import Login from './pages/login/Login';
 import { useSelector } from 'react-redux';
 import { selectUser } from './Components/store/reducer/userSlice';
 import { useDispatch } from 'react-redux'

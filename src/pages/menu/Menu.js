@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Typography, Box, Grid, Button, Modal } from "@mui/material";
+import { Typography, Box, Grid, Button, Modal, Container } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell"; 
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -13,11 +13,13 @@ import Paper from "@mui/material/Paper";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 import { Stack } from "@mui/system";
-import { selectUser } from './store/reducer/userSlice';
-import { getMenuItemsByRes, deleteMenuItem } from "../api/api";
-import { setMenuItems } from "./store/reducer/menuItemsSlice";
+import { selectUser } from '../../Components/store/reducer/userSlice';
+import { getMenuItemsByRes, deleteMenuItem } from "../../api/api";
+import { setMenuItems } from "../../Components/store/reducer/menuItemsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import SubMenu from "../../Components/SubMenu/SubMenu";
+import Breadcrumb from "../../Components/Breadcrumb/index";
 
 const style = {
   position: "absolute",
@@ -68,13 +70,15 @@ function Menu() {
     navigate("/menu");
   };
 
-  console.log("menuItems >> :- ", menuItems);
 
   return (
     <Box
       pb={3}
-      sx={{ bgcolor: "#f0f1f1", width: "100%", borderRadius: "10px" }}
+      sx={{ bgcolor: "#f0f1f1", width: "100%"}}
     >
+      <SubMenu
+        title={<Breadcrumb routeSegments={[{ name: "Menu", path: "#" }]} />}
+      />
       <Grid m={2} container spacing={2}>
         <Grid item xs={12} md={8} lg={9}>
           <Typography
@@ -105,10 +109,9 @@ function Menu() {
           </Link>
         </Grid>
       </Grid>
-      <Box m={4} sx={{ borderRadius: "100px" }}>
-        <TableContainer m={3} component={Paper}>
+      <Container>
+        <TableContainer m={3} component={Paper} sx={{ width: "100%" }}>
           <Table
-            sx={{ minWidth: 650, borderRadius: "100px" }}
             aria-label="caption table"
           >
             <TableHead>
@@ -202,7 +205,7 @@ function Menu() {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
+      </Container>
     </Box>
   );
 }

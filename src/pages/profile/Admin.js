@@ -13,8 +13,10 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
-import { getAdminByUser, updateAdmin } from "../api/api";
-import { selectUser } from "./store/reducer/userSlice";
+import SubMenu from "../../Components/SubMenu/SubMenu";
+import Breadcrumb from "../../Components/Breadcrumb/index";
+import { getAdminByUser, updateAdmin } from "../../api/api";
+import { selectUser } from "../../Components/store/reducer/userSlice";
 import { useSelector } from "react-redux";
 
 const style = {
@@ -43,6 +45,7 @@ const style = {
     fontWeight: "bold",
     ml: "100px",
     mt: 1,
+    color: "#1976D2"
   },
   success: {
     mt: 1,
@@ -128,14 +131,10 @@ function Admin() {
   console.log("User >>> ", user.username);
 
   return (
-    <Box>
-      <Box sx={style.headerBox}>
-        {/* <Avatar
-        alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
-        sx={{ padding: 4, width: 100, height: 100 }}
-      /> */}
-      </Box>
+    <Box sx={{ width: "100%", overflowX: "hidden" }}>
+       <SubMenu
+        title={<Breadcrumb routeSegments={[{ name: "Profile", path: "#" }]} />}
+      />
       {success && (
         <Typography variant="h6" align="center" sx={style.success}>
           {success}

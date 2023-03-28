@@ -10,12 +10,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { getCateByResturant, deleteCategory } from "../api/api";
+import { getCateByResturant, deleteCategory } from "../../api/api";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "./store/reducer/userSlice";
+import { selectUser } from "../../Components/store/reducer/userSlice";
 import Dialog from "@mui/material/Dialog/Dialog";
 
 function Categories() {

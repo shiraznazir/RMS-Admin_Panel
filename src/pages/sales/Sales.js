@@ -5,8 +5,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { useSelector } from "react-redux";
-import { selectUser } from "./store/reducer/userSlice";
-import { getDeliveredOrders, getOrdersHistory } from "../api/api";
+import { selectUser } from "../../Components/store/reducer/userSlice";
+import { getDeliveredOrders, getOrdersHistory } from "../../api/api";
 import { useDownloadExcel } from "react-export-table-to-excel";
 import groupArray from "group-array";
 import {
@@ -128,7 +128,7 @@ function Sales() {
             value={endDate}
             onChange={handleEndDate}
             sx={style.datePicker}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} sx={{ ml: 2 }} />}
           />
           <Button variant="contained" onClick={handleDate} sx={{ m: 1 }}>
             Find
@@ -136,7 +136,10 @@ function Sales() {
           <Button variant="contained" onClick={handleReset} sx={{ m: 1 }}>
             Reset
           </Button>
-          <Button variant="contained" onClick={onDownload}> Export excel </Button>
+          <Button variant="contained" onClick={onDownload}>
+            {" "}
+            Export excel{" "}
+          </Button>
         </LocalizationProvider>
       </Box>
       <Grid container spacing={3}>
@@ -210,56 +213,58 @@ function Sales() {
         </Grid>
       </Grid>
       <Grid sx={style.table}>
-        <TableContainer component={Paper}>
-          <Table ref={tableRef} aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left" sx={style.tableHeader}>
-                  Order Id
-                </TableCell>
-                <TableCell align="left" sx={style.tableHeader}>
-                  User Details
-                </TableCell>
-                <TableCell align="left" sx={style.tableHeader}>
-                  Amount
-                </TableCell>
-                <TableCell align="left" sx={style.tableHeader}>
-                  Date
-                </TableCell>
-                <TableCell align="left" sx={style.tableHeader}>
-                  Time
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.keys(orderList).map((key) => {
-                let date = new Date(orderList[key][0].timeStamp);
-                let sale = 0;
-                orderList[key].map((order) => {
-                  sale += order.totalProductPrice;
-                });
+        {Object.keys(orderList).length && (
+          <TableContainer component={Paper}>
+            <Table ref={tableRef} aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left" sx={style.tableHeader}>
+                    Order Id
+                  </TableCell>
+                  <TableCell align="left" sx={style.tableHeader}>
+                    User Details
+                  </TableCell>
+                  <TableCell align="left" sx={style.tableHeader}>
+                    Amount
+                  </TableCell>
+                  <TableCell align="left" sx={style.tableHeader}>
+                    Date
+                  </TableCell>
+                  <TableCell align="left" sx={style.tableHeader}>
+                    Time
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.keys(orderList).map((key) => {
+                  let date = new Date(orderList[key][0].timeStamp);
+                  let sale = 0;
+                  orderList[key].map((order) => {
+                    sale += order.totalProductPrice;
+                  });
 
-                return (
-                  <TableRow>
-                    <TableCell align="centre">{key}</TableCell>
-                    <TableCell align="centre">
-                      {orderList[key][0].userId.name
-                        ? orderList[key][0].userId.name
-                        : orderList[key][0].userId.mobNo}
-                    </TableCell>
-                    <TableCell align="centre">{sale}</TableCell>
-                    <TableCell align="centre">
-                      {date.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell align="centre">
-                      {date.toLocaleTimeString()}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  return (
+                    <TableRow>
+                      <TableCell align="centre">{key}</TableCell>
+                      <TableCell align="centre">
+                        {orderList[key][0].userId.name
+                          ? orderList[key][0].userId.name
+                          : orderList[key][0].userId.mobNo}
+                      </TableCell>
+                      <TableCell align="centre">{sale}</TableCell>
+                      <TableCell align="centre">
+                        {date.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell align="centre">
+                        {date.toLocaleTimeString()}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Grid>
     </>
   );

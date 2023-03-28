@@ -6,8 +6,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "./store/reducer/userSlice";
-import { checkAdminCredentials } from "../api/api";
+import { login } from "../../Components/store/reducer/userSlice";
+import { checkAdminCredentials } from "../../api/api";
 import {
   TextareaAutosize,
   FormControl,

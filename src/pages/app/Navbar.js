@@ -21,16 +21,16 @@ import Tooltip from "@mui/material/Tooltip";
 import Popover from "@mui/material/Popover";
 import Grid from "@mui/material/Grid";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import Button from "@mui/material/Button";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
-import OrderedItem from "./OrderedItem";
-import Menu from "./Menu";
-import Stocks from "./Stocks";
+import OrderedItem from "../OrderedItem";
+import Menu from "../menu/Menu";
+import Stocks from "../Stocks";
 import { useState } from "react";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
-import ComputerIcon from "@mui/icons-material/Computer";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
@@ -38,20 +38,23 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser } from "./store/reducer/userSlice";
-import { logout } from "./store/reducer/userSlice";
+import { selectUser } from "../../Components/store/reducer/userSlice";
+import { logout } from "../../Components/store/reducer/userSlice";
 import { useNavigate } from "react-router-dom";
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import AddMenu from "./AddMenu";
-import Categories from "./Categories";
-import AddCategories from "./AddCategories";
-import Dashboard from "./Dashboard";
-import AddAdmin from "./AddAdmin";
-import OfferForm from "./OfferForm";
-import Admin from "./Admin";
-import SuperAdmin from "./SuperAdmin";
-import NotAccess from "./NotAccess";
-import Sales from "./Sales"
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import AddMenu from "../menu/AddMenu";
+import AddMenu1 from "../menu/add";
+import Categories from "../category/Categories";
+import AddCategories from "../category/AddCategories";
+import Dashboard from "../dashboard/Dashboard";
+import SuperDashboard from "../dashboard/SuperDashboard";
+import AddAdmin from "../profile/AddAdmin";
+import OfferForm from "../OfferForm";
+import Admin from "../profile/Admin";
+import SuperAdmin from "../profile/SuperAdmin";
+import NotAccess from "../notAccess/NotAccess";
+import Sales from "../sales/Sales";
+import Users from "../users/index";
 
 const drawerWidth = 240;
 
@@ -162,16 +165,15 @@ export default function Navbar() {
   };
 
   const handleSetting = (option) => {
-    
-    if(option === "Profile"){
-      navigate('/Admin')
-    } else if(option === "Account"){
-      navigate('/Sales')
-    } else if(option === "Dashboard"){
-      navigate('/')
+    if (option === "Profile") {
+      navigate("/Admin");
+    } else if (option === "Account") {
+      navigate("/Sales");
+    } else if (option === "Dashboard") {
+      navigate("/");
     }
     setAnchorEl(null);
-  }
+  };
 
   const openNotify = Boolean(notify);
   const idNotify = openNotify ? "simple-popover" : undefined;
@@ -193,18 +195,39 @@ export default function Navbar() {
   };
 
   const drawerList = [
-    // { name: "Dashboard", icon: <DashboardIcon /> },
     {
-      name: user1.username === "super_admin" ? "SuperAdmin" : "Admin",
-      icon: <AccountCircleIcon />,
+      name: user1.username === "super_admin" ? "Admins" : "Profile",
+      icon:
+        user1.username === "super_admin" ? (
+          <AdminPanelSettingsIcon />
+        ) : (
+          <AccountCircleIcon />
+        ),
     },
-    {name: "Sales", icon: <PointOfSaleIcon />},
-    { name: "OrderedItem", icon: <ShoppingCartIcon /> },
-    { name: "Menu", icon: <RestaurantMenuIcon /> },
-    { name: "Stocks", icon: <AutoGraphIcon /> },
-    { name: "Category", icon: <CategoryIcon /> },
+    {
+      name: user1.username === "super_admin" ? "Users" : "Menu",
+      icon:
+        user1.username === "super_admin" ? (
+          <SupervisedUserCircleIcon />
+        ) : (
+          <RestaurantMenuIcon />
+        ),
+    },
+    {
+      name: user1.username !== "super_admin" && "Stocks",
+      icon: user1.username !== "super_admin" && <AutoGraphIcon />,
+    },
+    {
+      name: user1.username !== "super_admin" && "Category",
+      icon: user1.username !== "super_admin" && <CategoryIcon />,
+    },
+    {
+      name: user1.username !== "super_admin" && "Sales",
+      icon: user1.username !== "super_admin" && <PointOfSaleIcon />,
+    },
   ];
-  // console.log("Navbar user >>>>>>>>>>", user1);
+  
+  
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -312,19 +335,29 @@ export default function Navbar() {
                     {settings.map((setting) => {
                       return setting === "Hi, " ? (
                         <Typography
-                          sx={{ p: 2, width: "200px", textAlign: "center", color: '#000000' }}
+                          sx={{
+                            p: 2,
+                            width: "200px",
+                            textAlign: "center",
+                            color: "#000000",
+                          }}
                         >
                           {setting + user.username}
                         </Typography>
                       ) : setting === "Logout" ? (
                         <Button
-                          sx={{ p: 2, width: "200px", color: '#000000' }}
+                          sx={{ p: 2, width: "200px", color: "#000000" }}
                           onClick={(e) => handleLogout(e)}
                         >
                           {setting}
                         </Button>
                       ) : (
-                        <Button onClick={()=>handleSetting(setting)} sx={{ p: 2, width: "200px", color: '#000000' }}>{setting}</Button>
+                        <Button
+                          onClick={() => handleSetting(setting)}
+                          sx={{ p: 2, width: "200px", color: "#000000" }}
+                        >
+                          {setting}
+                        </Button>
                       );
                     })}
                   </Grid>
@@ -387,14 +420,22 @@ export default function Navbar() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
           <Route
-            path="/admin"
+            path="/"
+            element={
+              user1.username === "super_admin" ? (
+                <SuperDashboard />
+              ) : (
+                <Dashboard />
+              )
+            }
+          />
+          <Route
+            path="/profile"
             element={
               user1.username !== "super_admin" ? <Admin /> : <NotAccess />
             }
           />
-          <Route path="/OrderedItem" element={<OrderedItem />} />
           <Route path="/Menu" element={<Menu />} />
           <Route path="/Stocks" element={<Stocks />} />
           <Route path="/addmenu" element={<AddMenu />} />
@@ -406,8 +447,9 @@ export default function Navbar() {
           <Route path="/offers" element={<OfferForm />} />
           <Route path="/sales" element={<Sales />} />
           {/* <Route path="/signUp" element={<Admin />} /> */}
+          <Route path="/Users" element={<Users />} />
           <Route
-            path="/superAdmin"
+            path="/Admins"
             element={
               user1.username == "super_admin" ? <SuperAdmin /> : <NotAccess />
             }
